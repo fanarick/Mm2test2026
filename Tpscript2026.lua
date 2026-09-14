@@ -67,6 +67,10 @@ local Codes = {
     ["🇺🇦 Українська"] = "uk"
 }
 
+--==================================================
+-- TRANSLATIONS
+--==================================================
+
 local T = {
 
     ru = {
@@ -327,11 +331,15 @@ local T = {
 }
 
 --==================================================
--- COUNTRY / LANGUAGE SCREEN
+-- LANGUAGE SCREEN
 --==================================================
 
 local SelectedLanguage = "🇷🇺 Русский"
-local LanguageTab = Window:CreateTab("🌍 Language", 4483362458)
+
+local LanguageTab = Window:CreateTab(
+    "🌍 Language",
+    4483362458
+)
 
 LanguageTab:CreateParagraph({
     Title = "❄️ WINTER",
@@ -345,8 +353,10 @@ LanguageTab:CreateDropdown({
     MultipleOptions = false,
 
     Callback = function(Value)
+
         if type(Value) == "table" then
             SelectedLanguage = Value[1] or SelectedLanguage
+
         elseif type(Value) == "string" then
             SelectedLanguage = Value
         end
@@ -369,16 +379,16 @@ LanguageTab:CreateButton({
         local Code = Codes[SelectedLanguage] or "ru"
         local L = T[Code]
 
-        --================================================
+        --==================================================
         -- TELEPORT
-        --================================================
+        --==================================================
 
         local TeleportTab = Window:CreateTab(
             L.teleport,
             4483362458
         )
 
-        local SavedPoint
+        local SavedPoint = nil
 
         TeleportTab:CreateButton({
             Name = L.set,
@@ -390,6 +400,7 @@ LanguageTab:CreateButton({
                     and Character:FindFirstChild("HumanoidRootPart")
 
                 if Root then
+
                     SavedPoint = Root.CFrame
 
                     Rayfield:Notify({
@@ -411,6 +422,7 @@ LanguageTab:CreateButton({
                     and Character:FindFirstChild("HumanoidRootPart")
 
                 if Root and SavedPoint then
+
                     Root.CFrame = SavedPoint
 
                     Rayfield:Notify({
@@ -422,9 +434,9 @@ LanguageTab:CreateButton({
             end
         })
 
-        --================================================
+        --==================================================
         -- FLY
-        --================================================
+        --==================================================
 
         local FlyTab = Window:CreateTab(
             L.fly,
@@ -433,149 +445,440 @@ LanguageTab:CreateButton({
 
         local Flying = false
         local Speed = 50
-        local Velocity
-        local Gyro
+
+        local Velocity = nil
+        local Gyro = nil
+        local FlyConnection = nil
+
+        local OldAutoRotate = true
+
+        --==================================================
+        -- GET CHARACTER
+        --==================================================
+
+        local function GetCharacter()
+
+            local Character = LocalPlayer.Character
+
+            if not Character then
+                return nil, nil, nil
+            end
+
+            local Humanoid =
+                Character:FindFirstChildOfClass("Humanoid")
+
+            local Root =
+                Character:FindFirstChild("HumanoidRootPart")
+
+            return Character, Humanoid, Root
+        end
+
+        --==================================================
+        -- REMOVE OLD FLY OBJECTS
+        --==================================================
+
+        local function CleanupFlyObjects()
+
+            local Character =
+                LocalPlayer.Character
+
+            if not Character then
+                return
+            end
+
+            local Root =
+                Character:FindFirstChild("HumanoidRootPart")
+
+            if not Root then
+                return
+            end
+
+            for _, Object in ipairs(Root:GetChildren()) do
+
+                if Object.Name == "WinterFlyVelocity"
+                    or Object.Name == "WinterFlyGyro" then
+
+                    pcall(function()
+                        Object:Destroy()
+                    end)
+                end
+            end
+        end
+
+        --==================================================
+        -- STOP FLY
+        --==================================================
 
         local function StopFly()
 
             Flying = false
 
+            if FlyConnection then
+                FlyConnection:Disconnect()
+                FlyConnection = nil
+            end
+
             if Velocity then
-                Velocity:Destroy()
+                pcall(function()
+                    Velocity:Destroy()
+                end)
+
                 Velocity = nil
             end
 
             if Gyro then
-                Gyro:Destroy()
+                pcall(function()
+                    Gyro:Destroy()
+                end)
+
                 Gyro = nil
             end
 
-            local Character = LocalPlayer.Character
-            local Root = Character
-                and Character:FindFirstChild("HumanoidRootPart")
+            CleanupFlyObjects()
+
+            local Character,
+                Humanoid,
+                Root = GetCharacter()
+
+            if Humanoid then
+                Humanoid.AutoRotate = OldAutoRotate
+            end
 
             if Root then
-                Root.AssemblyLinearVelocity = Vector3.zero
+                Root.AssemblyLinearVelocity =
+                    Vector3.zero
             end
         end
 
-        FlyTab:CreateSlider({
-            Name = L.speed,
-            Range = {1, 100},
-            Increment = 1,
-            Suffix = " studs/s",
-            CurrentValue = 50,
+        --==================================================
+        -- CREATE FLY OBJECTS
+        --==================================================
 
-            Callback = function(Value)
-                Speed = Value
+        local function CreateFlyObjects()
+
+            local Character,
+                Humanoid,
+                Root = GetCharacter()
+
+            if not Character
+                or not Humanoid
+                or not Root then
+
+                return false
             end
-        })
 
-        FlyTab:CreateToggle({
-            Name = L.flyOn,
-            CurrentValue = false,
+            CleanupFlyObjects()
 
-            Callback = function(Value)
+            OldAutoRotate =
+                Humanoid.AutoRotate
 
-                if not Value then
-                    StopFly()
-                    return
-                end
+            Humanoid.AutoRotate = false
 
-                local Character = LocalPlayer.Character
-                local Root = Character
-                    and Character:FindFirstChild("HumanoidRootPart")
+            --==============================================
+            -- BODY VELOCITY
+            --==============================================
 
-                if not Root then
-                    return
-                end
+            Velocity = Instance.new("BodyVelocity")
 
-                Flying = true
+            Velocity.Name =
+                "WinterFlyVelocity"
 
-                Velocity = Instance.new("BodyVelocity")
-                Velocity.MaxForce = Vector3.new(
+            Velocity.MaxForce =
+                Vector3.new(
                     math.huge,
                     math.huge,
                     math.huge
                 )
-                Velocity.Velocity = Vector3.zero
-                Velocity.Parent = Root
 
-                Gyro = Instance.new("BodyGyro")
-                Gyro.MaxTorque = Vector3.new(
+            Velocity.P =
+                100000
+
+            Velocity.Velocity =
+                Vector3.zero
+
+            Velocity.Parent =
+                Root
+
+            --==============================================
+            -- BODY GYRO
+            --==============================================
+
+            Gyro = Instance.new("BodyGyro")
+
+            Gyro.Name =
+                "WinterFlyGyro"
+
+            Gyro.MaxTorque =
+                Vector3.new(
                     math.huge,
                     math.huge,
                     math.huge
                 )
-                Gyro.P = 10000
-                Gyro.CFrame = workspace.CurrentCamera.CFrame
-                Gyro.Parent = Root
-            end
-        })
 
-        RunService.RenderStepped:Connect(function()
+            Gyro.P =
+                100000
+
+            Gyro.D =
+                1000
+
+            Gyro.CFrame =
+                workspace.CurrentCamera.CFrame
+
+            Gyro.Parent =
+                Root
+
+            return true
+        end
+
+        --==================================================
+        -- FLY MOVEMENT
+        --==================================================
+
+        local function UpdateFly()
 
             if not Flying then
                 return
             end
 
-            local Character = LocalPlayer.Character
-            local Root = Character
-                and Character:FindFirstChild("HumanoidRootPart")
+            local Character,
+                Humanoid,
+                Root = GetCharacter()
 
-            local Humanoid = Character
-                and Character:FindFirstChildOfClass("Humanoid")
+            local Camera =
+                workspace.CurrentCamera
 
-            local CurrentCamera = workspace.CurrentCamera
+            if not Character
+                or not Humanoid
+                or not Root
+                or not Camera then
 
-            if not Root or not Humanoid or not Velocity or not Gyro then
                 return
             end
 
-            local CameraCF = CurrentCamera.CFrame
-            local Look = CameraCF.LookVector
-            local Right = CameraCF.RightVector
+            --==============================================
+            -- RECREATE OBJECTS AFTER RESPAWN
+            --==============================================
 
-            local Move = Humanoid.MoveDirection
-            local Direction = Vector3.zero
+            if not Velocity
+                or not Velocity.Parent
+                or not Gyro
+                or not Gyro.Parent then
 
-            if Move.Magnitude > 0 then
-
-                local Forward =
-                    Vector3.new(Look.X, 0, Look.Z)
-
-                local RightFlat =
-                    Vector3.new(Right.X, 0, Right.Z)
-
-                if Forward.Magnitude > 0 then
-                    Forward = Forward.Unit
-                end
-
-                if RightFlat.Magnitude > 0 then
-                    RightFlat = RightFlat.Unit
-                end
-
-                local ForwardAmount = Move:Dot(Forward)
-                local RightAmount = Move:Dot(RightFlat)
-
-                Direction =
-                    Forward * ForwardAmount
-                    + RightFlat * RightAmount
-
-                if Direction.Magnitude > 0 then
-                    Direction = Direction.Unit
+                if not CreateFlyObjects() then
+                    return
                 end
             end
 
-            Velocity.Velocity = Direction * Speed
+            local CameraCF =
+                Camera.CFrame
 
-            -- Character looks exactly where camera looks
-            Gyro.CFrame = CameraCF
-        end)
+            local Look =
+                CameraCF.LookVector
 
-        --================================================
+            local Right =
+                CameraCF.RightVector
+
+            --==============================================
+            -- FLAT CAMERA DIRECTIONS
+            --==============================================
+
+            local FlatLook =
+                Vector3.new(
+                    Look.X,
+                    0,
+                    Look.Z
+                )
+
+            local FlatRight =
+                Vector3.new(
+                    Right.X,
+                    0,
+                    Right.Z
+                )
+
+            if FlatLook.Magnitude < 0.001 then
+                FlatLook =
+                    Vector3.new(
+                        0,
+                        0,
+                        -1
+                    )
+            else
+                FlatLook =
+                    FlatLook.Unit
+            end
+
+            if FlatRight.Magnitude < 0.001 then
+                FlatRight =
+                    Vector3.new(
+                        1,
+                        0,
+                        0
+                    )
+            else
+                FlatRight =
+                    FlatRight.Unit
+            end
+
+            --==============================================
+            -- MOBILE JOYSTICK / WASD
+            --==============================================
+
+            local Move =
+                Humanoid.MoveDirection
+
+            local Direction =
+                Vector3.zero
+
+            if Move.Magnitude > 0.01 then
+
+                -- Forward/backward input
+                local ForwardAmount =
+                    Move:Dot(FlatLook)
+
+                -- Left/right input
+                local RightAmount =
+                    Move:Dot(FlatRight)
+
+                --==========================================
+                -- CAMERA-RELATIVE 3D FLIGHT
+                --==========================================
+
+                Direction =
+                    (Look * ForwardAmount)
+                    + (FlatRight * RightAmount)
+
+                if Direction.Magnitude > 0.01 then
+                    Direction =
+                        Direction.Unit
+                else
+                    Direction =
+                        Vector3.zero
+                end
+            end
+
+            --==============================================
+            -- APPLY REAL FLIGHT VELOCITY
+            --==============================================
+
+            Velocity.Velocity =
+                Direction * Speed
+
+            --==============================================
+            -- ROTATE CHARACTER WITH CAMERA
+            --==============================================
+
+            Gyro.CFrame =
+                CameraCF
+        end
+
+        --==================================================
+        -- SPEED
+        --==================================================
+
+        FlyTab:CreateSlider({
+
+            Name = L.speed,
+
+            Range = {
+                1,
+                100
+            },
+
+            Increment = 1,
+
+            Suffix = " studs/s",
+
+            CurrentValue = 50,
+
+            Callback = function(Value)
+
+                Speed =
+                    math.clamp(
+                        tonumber(Value) or 50,
+                        1,
+                        100
+                    )
+            end
+        })
+
+        --==================================================
+        -- FLY TOGGLE
+        --==================================================
+
+        FlyTab:CreateToggle({
+
+            Name = L.flyOn,
+
+            CurrentValue = false,
+
+            Callback = function(Value)
+
+                if not Value then
+
+                    StopFly()
+
+                    return
+                end
+
+                local Character,
+                    Humanoid,
+                    Root = GetCharacter()
+
+                if not Character
+                    or not Humanoid
+                    or not Root then
+
+                    return
+                end
+
+                Flying = true
+
+                if not CreateFlyObjects() then
+                    Flying = false
+                    return
+                end
+
+                --==========================================
+                -- UPDATE LOOP
+                --==========================================
+
+                if FlyConnection then
+                    FlyConnection:Disconnect()
+                end
+
+                FlyConnection =
+                    RunService.RenderStepped:Connect(
+                        UpdateFly
+                    )
+            end
+        })
+
+        --==================================================
+        -- CHARACTER RESPAWN SUPPORT
+        --==================================================
+
+        LocalPlayer.CharacterAdded:Connect(
+            function(Character)
+
+                task.wait(0.5)
+
+                if Flying then
+
+                    CleanupFlyObjects()
+
+                    task.wait(0.1)
+
+                    if Flying then
+                        CreateFlyObjects()
+                    end
+                end
+            end
+        )
+
+        --==================================================
         -- SOCIAL
-        --================================================
+        --==================================================
 
         local SocialTab = Window:CreateTab(
             L.social,
@@ -583,6 +886,7 @@ LanguageTab:CreateButton({
         )
 
         SocialTab:CreateButton({
+
             Name = L.funpay,
 
             Callback = function()
@@ -591,8 +895,11 @@ LanguageTab:CreateButton({
                     "https://funpay.com/users/16761126/"
 
                 pcall(function()
+
                     if setclipboard then
                         setclipboard(Link)
+                    elseif toclipboard then
+                        toclipboard(Link)
                     end
                 end)
 
@@ -604,9 +911,9 @@ LanguageTab:CreateButton({
             end
         })
 
-        --================================================
+        --==================================================
         -- CREDITS
-        --================================================
+        --==================================================
 
         local CreditsTab = Window:CreateTab(
             L.credits,
@@ -633,9 +940,9 @@ LanguageTab:CreateButton({
             Content = "acou090"
         })
 
-        --================================================
+        --==================================================
         -- STATISTICS
-        --================================================
+        --==================================================
 
         local StatsTab = Window:CreateTab(
             L.stats,
@@ -645,16 +952,22 @@ LanguageTab:CreateButton({
         getgenv().WinterLaunches =
             (getgenv().WinterLaunches or 0) + 1
 
-        local Stats = StatsTab:CreateParagraph({
-            Title = L.stats,
-            Content = ""
-        })
+        local Stats =
+            StatsTab:CreateParagraph({
+                Title = L.stats,
+                Content = ""
+            })
+
+        --==================================================
+        -- EXECUTOR
+        --==================================================
 
         local function GetExecutor()
 
             if identifyexecutor then
 
-                local Success, Name =
+                local Success,
+                    Name =
                     pcall(identifyexecutor)
 
                 if Success and Name then
@@ -665,40 +978,57 @@ LanguageTab:CreateButton({
             return "Unknown"
         end
 
+        --==================================================
+        -- UPDATE STATS
+        --==================================================
+
         local function UpdateStats()
 
             Stats:Set({
+
                 Title = L.stats,
 
                 Content =
                     L.players
                     .. ": "
-                    .. tostring(#Players:GetPlayers())
+                    .. tostring(
+                        #Players:GetPlayers()
+                    )
+
                     .. "\n"
+
                     .. L.executor
                     .. ": "
                     .. GetExecutor()
+
                     .. "\n"
+
                     .. L.launches
                     .. ": "
-                    .. tostring(getgenv().WinterLaunches)
+                    .. tostring(
+                        getgenv().WinterLaunches
+                    )
             })
         end
 
         UpdateStats()
 
+        --==================================================
+        -- LIVE STATISTICS
+        --==================================================
+
         task.spawn(function()
 
-            while task.wait(2) do
+            while Started do
+
+                task.wait(2)
 
                 if not Started then
                     break
                 end
 
                 pcall(UpdateStats)
-
             end
-
         end)
     end
 })
