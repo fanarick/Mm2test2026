@@ -1,216 +1,39 @@
+--// ❄️ WINTER
+--// PASSWORD: acou090
+--// PASSWORD -> COUNTRY -> MENU
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local LocalPlayer = Players.LocalPlayer
+
 local Rayfield = loadstring(game:HttpGet(
     "https://raw.githubusercontent.com/SiriusSoftwareLtd/Rayfield/main/source.lua"
 ))()
 
-local Players = game:GetService("Players")
-local Player = Players.LocalPlayer
-
-local Point = nil
-local CurrentLanguage = "Русский"
-local SelectedLanguage = "Русский"
-
-local TotalLaunches = "Недоступно"
-
-local Executor = "Неизвестно"
-if identifyexecutor then
-    local Name, Version = identifyexecutor()
-    Executor = tostring(Name or "Неизвестно")
-    if Version then
-        Executor = Executor .. " " .. tostring(Version)
-    end
-end
-
-local T = {
-    ["Русский"] = {
-        Teleport = "📍 Телепорт",
-        Languages = "🌐 Языки",
-        Social = "🔗 Соц. сети",
-        Credits = "👑 Кредиты",
-        Stats = "📊 Статистика",
-        Set = "📍 Поставить точку",
-        TP = "✈️ Телепорт к точке",
-        Select = "🌐 Выбор языка",
-        Apply = "✅ Применить язык",
-        SetOK = "Точка поставлена :Þ",
-        TPOK = "Телепортация сделана",
-        NoPoint = "Сначала поставьте точку!",
-        Applied = "Русский язык применён",
-        FunPay = "🛒 FunPay",
-        StatsTitle = "📊 Статистика",
-        Players = "👥 Сейчас играют: ",
-        Launches = "🚀 Всего запусков: ",
-        Executor = "⚙️ Экзекутор: ",
-        Creator = "Создатель: acou090",
-        Tester = "Тестер: acou090",
-        CoCreator = "Соавтор: ChatGPT",
-        Owner = "👑 ВЛАДЕЛЕЦ: @acou090"
-    },
-
-    ["English"] = {
-        Teleport = "📍 Teleport",
-        Languages = "🌐 Languages",
-        Social = "🔗 Social Networks",
-        Credits = "👑 Credits",
-        Stats = "📊 Statistics",
-        Set = "📍 Set Point",
-        TP = "✈️ TP to Point",
-        Select = "🌐 Select Language",
-        Apply = "✅ Apply Language",
-        SetOK = "Point set :Þ",
-        TPOK = "Teleportation complete",
-        NoPoint = "Set a point first!",
-        Applied = "English language applied",
-        FunPay = "🛒 FunPay",
-        StatsTitle = "📊 Statistics",
-        Players = "👥 Playing now: ",
-        Launches = "🚀 Total launches: ",
-        Executor = "⚙️ Executor: ",
-        Creator = "Creator: acou090",
-        Tester = "Tester: acou090",
-        CoCreator = "Co-creator: ChatGPT",
-        Owner = "👑 OWNER: @acou090"
-    },
-
-    ["Deutsch"] = {
-        Teleport = "📍 Teleport",
-        Languages = "🌐 Sprachen",
-        Social = "🔗 Soziale Netzwerke",
-        Credits = "👑 Credits",
-        Stats = "📊 Statistik",
-        Set = "📍 Punkt setzen",
-        TP = "✈️ Zum Punkt",
-        Select = "🌐 Sprache auswählen",
-        Apply = "✅ Sprache anwenden",
-        SetOK = "Punkt gesetzt :Þ",
-        TPOK = "Teleportation abgeschlossen",
-        NoPoint = "Setze zuerst einen Punkt!",
-        Applied = "Deutsch angewendet",
-        FunPay = "🛒 FunPay",
-        StatsTitle = "📊 Statistik",
-        Players = "👥 Jetzt im Spiel: ",
-        Launches = "🚀 Starts insgesamt: ",
-        Executor = "⚙️ Executor: ",
-        Creator = "Ersteller: acou090",
-        Tester = "Tester: acou090",
-        CoCreator = "Mitentwickler: ChatGPT",
-        Owner = "👑 BESITZER: @acou090"
-    },
-
-    ["Español"] = {
-        Teleport = "📍 Teletransporte",
-        Languages = "🌐 Idiomas",
-        Social = "🔗 Redes sociales",
-        Credits = "👑 Créditos",
-        Stats = "📊 Estadísticas",
-        Set = "📍 Establecer punto",
-        TP = "✈️ Ir al punto",
-        Select = "🌐 Seleccionar idioma",
-        Apply = "✅ Aplicar idioma",
-        SetOK = "Punto establecido :Þ",
-        TPOK = "Teletransporte completado",
-        NoPoint = "¡Primero establece un punto!",
-        Applied = "Español aplicado",
-        FunPay = "🛒 FunPay",
-        StatsTitle = "📊 Estadísticas",
-        Players = "👥 Jugando ahora: ",
-        Launches = "🚀 Lanzamientos totales: ",
-        Executor = "⚙️ Ejecutor: ",
-        Creator = "Creador: acou090",
-        Tester = "Probador: acou090",
-        CoCreator = "Co-creador: ChatGPT",
-        Owner = "👑 PROPIETARIO: @acou090"
-    },
-
-    ["Français"] = {
-        Teleport = "📍 Téléportation",
-        Languages = "🌐 Langues",
-        Social = "🔗 Réseaux sociaux",
-        Credits = "👑 Crédits",
-        Stats = "📊 Statistiques",
-        Set = "📍 Définir le point",
-        TP = "✈️ Aller au point",
-        Select = "🌐 Choisir la langue",
-        Apply = "✅ Appliquer la langue",
-        SetOK = "Point défini :Þ",
-        TPOK = "Téléportation terminée",
-        NoPoint = "Définissez d'abord un point !",
-        Applied = "Français appliqué",
-        FunPay = "🛒 FunPay",
-        StatsTitle = "📊 Statistiques",
-        Players = "👥 Joueurs actuels : ",
-        Launches = "🚀 Lancements totaux : ",
-        Executor = "⚙️ Exécuteur : ",
-        Creator = "Créateur : acou090",
-        Tester = "Testeur : acou090",
-        CoCreator = "Co-créateur : ChatGPT",
-        Owner = "👑 PROPRIÉTAIRE : @acou090"
-    },
-
-    ["Português"] = {
-        Teleport = "📍 Teleporte",
-        Languages = "🌐 Idiomas",
-        Social = "🔗 Redes sociais",
-        Credits = "👑 Créditos",
-        Stats = "📊 Estatísticas",
-        Set = "📍 Definir ponto",
-        TP = "✈️ Ir para o ponto",
-        Select = "🌐 Selecionar idioma",
-        Apply = "✅ Aplicar idioma",
-        SetOK = "Ponto definido :Þ",
-        TPOK = "Teleporte concluído",
-        NoPoint = "Defina um ponto primeiro!",
-        Applied = "Português aplicado",
-        FunPay = "🛒 FunPay",
-        StatsTitle = "📊 Estatísticas",
-        Players = "👥 Jogando agora: ",
-        Launches = "🚀 Total de inicializações: ",
-        Executor = "⚙️ Executor: ",
-        Creator = "Criador: acou090",
-        Tester = "Testador: acou090",
-        CoCreator = "Co-criador: ChatGPT",
-        Owner = "👑 PROPRIETÁRIO: @acou090"
-    },
-
-    ["Türkçe"] = {
-        Teleport = "📍 Teleport",
-        Languages = "🌐 Diller",
-        Social = "🔗 Sosyal ağlar",
-        Credits = "👑 Krediler",
-        Stats = "📊 İstatistikler",
-        Set = "📍 Nokta belirle",
-        TP = "✈️ Noktaya git",
-        Select = "🌐 Dil seç",
-        Apply = "✅ Dili uygula",
-        SetOK = "Nokta belirlendi :Þ",
-        TPOK = "Işınlanma tamamlandı",
-        NoPoint = "Önce bir nokta belirle!",
-        Applied = "Türkçe uygulandı",
-        FunPay = "🛒 FunPay",
-        StatsTitle = "📊 İstatistikler",
-        Players = "👥 Şu anda oynayan: ",
-        Launches = "🚀 Toplam çalıştırma: ",
-        Executor = "⚙️ Executor: ",
-        Creator = "Oluşturan: acou090",
-        Tester = "Test eden: acou090",
-        CoCreator = "Ortak oluşturucu: ChatGPT",
-        Owner = "👑 SAHİP: @acou090"
-    }
-}
+--==================================================
+-- WINDOW / PASSWORD
+--==================================================
 
 local Window = Rayfield:CreateWindow({
     Name = "❄️ WINTER",
-    Icon = 0,
     LoadingTitle = "❄️ WINTER",
-    LoadingSubtitle = "Rayfield",
-    Theme = "Ocean",
+    LoadingSubtitle = "acou090",
+
     ConfigurationSaving = {
         Enabled = false
     },
+
+    Discord = {
+        Enabled = false
+    },
+
     KeySystem = true,
+
     KeySettings = {
-        Title = "🔒 Password",
-        Subtitle = "Enter password",
-        Note = "Winter access",
+        Title = "❄️ WINTER",
+        Subtitle = "Enter Password",
+        Note = "Password: acou090",
         FileName = "WinterKey",
         SaveKey = false,
         GrabKeyFromSite = false,
@@ -218,198 +41,664 @@ local Window = Rayfield:CreateWindow({
     }
 })
 
-local Tabs = {}
-local Elements = {}
+--==================================================
+-- LANGUAGES
+--==================================================
 
-local function GetText()
-    return T[CurrentLanguage]
-end
+local Languages = {
+    "🇷🇺 Русский",
+    "🇬🇧 English",
+    "🇩🇪 Deutsch",
+    "🇫🇷 Français",
+    "🇪🇸 Español",
+    "🇮🇹 Italiano",
+    "🇵🇱 Polski",
+    "🇺🇦 Українська"
+}
 
-local function UpdateStats()
-    if not Elements.StatsParagraph then
-        return
+local Codes = {
+    ["🇷🇺 Русский"] = "ru",
+    ["🇬🇧 English"] = "en",
+    ["🇩🇪 Deutsch"] = "de",
+    ["🇫🇷 Français"] = "fr",
+    ["🇪🇸 Español"] = "es",
+    ["🇮🇹 Italiano"] = "it",
+    ["🇵🇱 Polski"] = "pl",
+    ["🇺🇦 Українська"] = "uk"
+}
+
+local T = {
+
+    ru = {
+        lang = "🌍 Язык",
+        apply = "✅ Выбрать язык",
+
+        teleport = "📍 Телепорт",
+        fly = "✈️ Полёт",
+        social = "🌐 Соцсети",
+        credits = "👑 Создатели",
+        stats = "📊 Статистика",
+
+        set = "📍 Поставить точку",
+        tp = "🚀 Телепорт к точке",
+
+        setDone = "Точка поставлена :Þ",
+        tpDone = "Телепортация сделана",
+
+        flyOn = "✈️ Полёт",
+        speed = "Скорость полёта",
+
+        funpay = "💰 FunPay",
+        copied = "Ссылка скопирована!",
+
+        creator = "Создатель",
+        tester = "Тестер",
+        cocreator = "Соавтор",
+        owner = "Владелец",
+
+        players = "Игроков на сервере",
+        executor = "Экзекутор",
+        launches = "Запусков"
+    },
+
+    en = {
+        lang = "🌍 Language",
+        apply = "✅ Select Language",
+
+        teleport = "📍 Teleport",
+        fly = "✈️ Flight",
+        social = "🌐 Social",
+        credits = "👑 Creators",
+        stats = "📊 Statistics",
+
+        set = "📍 Set Point",
+        tp = "🚀 TP to Point",
+
+        setDone = "Point set :Þ",
+        tpDone = "Teleport completed",
+
+        flyOn = "✈️ Flight",
+        speed = "Flight Speed",
+
+        funpay = "💰 FunPay",
+        copied = "Link copied!",
+
+        creator = "Creator",
+        tester = "Tester",
+        cocreator = "Co-creator",
+        owner = "Owner",
+
+        players = "Players on server",
+        executor = "Executor",
+        launches = "Launches"
+    },
+
+    de = {
+        lang = "🌍 Sprache",
+        apply = "✅ Sprache auswählen",
+
+        teleport = "📍 Teleport",
+        fly = "✈️ Flug",
+        social = "🌐 Soziales",
+        credits = "👑 Ersteller",
+        stats = "📊 Statistik",
+
+        set = "📍 Punkt setzen",
+        tp = "🚀 Zum Punkt",
+
+        setDone = "Punkt gesetzt :Þ",
+        tpDone = "Teleport abgeschlossen",
+
+        flyOn = "✈️ Flug",
+        speed = "Fluggeschwindigkeit",
+
+        funpay = "💰 FunPay",
+        copied = "Link kopiert!",
+
+        creator = "Ersteller",
+        tester = "Tester",
+        cocreator = "Mitentwickler",
+        owner = "Besitzer",
+
+        players = "Spieler auf dem Server",
+        executor = "Executor",
+        launches = "Starts"
+    },
+
+    fr = {
+        lang = "🌍 Langue",
+        apply = "✅ Choisir la langue",
+
+        teleport = "📍 Téléportation",
+        fly = "✈️ Vol",
+        social = "🌐 Social",
+        credits = "👑 Créateurs",
+        stats = "📊 Statistiques",
+
+        set = "📍 Définir le point",
+        tp = "🚀 Aller au point",
+
+        setDone = "Point défini :Þ",
+        tpDone = "Téléportation terminée",
+
+        flyOn = "✈️ Vol",
+        speed = "Vitesse de vol",
+
+        funpay = "💰 FunPay",
+        copied = "Lien copié !",
+
+        creator = "Créateur",
+        tester = "Testeur",
+        cocreator = "Co-créateur",
+        owner = "Propriétaire",
+
+        players = "Joueurs sur le serveur",
+        executor = "Exécuteur",
+        launches = "Lancements"
+    },
+
+    es = {
+        lang = "🌍 Idioma",
+        apply = "✅ Elegir idioma",
+
+        teleport = "📍 Teletransporte",
+        fly = "✈️ Vuelo",
+        social = "🌐 Social",
+        credits = "👑 Creadores",
+        stats = "📊 Estadísticas",
+
+        set = "📍 Establecer punto",
+        tp = "🚀 Ir al punto",
+
+        setDone = "Punto establecido :Þ",
+        tpDone = "Teletransporte completado",
+
+        flyOn = "✈️ Vuelo",
+        speed = "Velocidad de vuelo",
+
+        funpay = "💰 FunPay",
+        copied = "¡Enlace copiado!",
+
+        creator = "Creador",
+        tester = "Probador",
+        cocreator = "Co-creador",
+        owner = "Propietario",
+
+        players = "Jugadores",
+        executor = "Ejecutor",
+        launches = "Inicios"
+    },
+
+    it = {
+        lang = "🌍 Lingua",
+        apply = "✅ Scegli lingua",
+
+        teleport = "📍 Teletrasporto",
+        fly = "✈️ Volo",
+        social = "🌐 Social",
+        credits = "👑 Creatori",
+        stats = "📊 Statistiche",
+
+        set = "📍 Imposta punto",
+        tp = "🚀 Vai al punto",
+
+        setDone = "Punto impostato :Þ",
+        tpDone = "Teletrasporto completato",
+
+        flyOn = "✈️ Volo",
+        speed = "Velocità di volo",
+
+        funpay = "💰 FunPay",
+        copied = "Link copiato!",
+
+        creator = "Creatore",
+        tester = "Tester",
+        cocreator = "Co-creatore",
+        owner = "Proprietario",
+
+        players = "Giocatori",
+        executor = "Executor",
+        launches = "Avvii"
+    },
+
+    pl = {
+        lang = "🌍 Język",
+        apply = "✅ Wybierz język",
+
+        teleport = "📍 Teleportacja",
+        fly = "✈️ Lot",
+        social = "🌐 Społeczność",
+        credits = "👑 Twórcy",
+        stats = "📊 Statystyki",
+
+        set = "📍 Ustaw punkt",
+        tp = "🚀 Teleportuj do punktu",
+
+        setDone = "Punkt ustawiony :Þ",
+        tpDone = "Teleportacja zakończona",
+
+        flyOn = "✈️ Lot",
+        speed = "Prędkość lotu",
+
+        funpay = "💰 FunPay",
+        copied = "Link skopiowany!",
+
+        creator = "Twórca",
+        tester = "Tester",
+        cocreator = "Współtwórca",
+        owner = "Właściciel",
+
+        players = "Gracze na serwerze",
+        executor = "Executor",
+        launches = "Uruchomienia"
+    },
+
+    uk = {
+        lang = "🌍 Мова",
+        apply = "✅ Вибрати мову",
+
+        teleport = "📍 Телепорт",
+        fly = "✈️ Політ",
+        social = "🌐 Соцмережі",
+        credits = "👑 Творці",
+        stats = "📊 Статистика",
+
+        set = "📍 Встановити точку",
+        tp = "🚀 Телепорт до точки",
+
+        setDone = "Точку встановлено :Þ",
+        tpDone = "Телепортацію виконано",
+
+        flyOn = "✈️ Політ",
+        speed = "Швидкість польоту",
+
+        funpay = "💰 FunPay",
+        copied = "Посилання скопійовано!",
+
+        creator = "Творець",
+        tester = "Тестер",
+        cocreator = "Співавтор",
+        owner = "Власник",
+
+        players = "Гравців на сервері",
+        executor = "Екзекутор",
+        launches = "Запусків"
+    }
+}
+
+--==================================================
+-- COUNTRY / LANGUAGE SCREEN
+--==================================================
+
+local SelectedLanguage = "🇷🇺 Русский"
+local LanguageTab = Window:CreateTab("🌍 Language", 4483362458)
+
+LanguageTab:CreateParagraph({
+    Title = "❄️ WINTER",
+    Content = "Выберите язык / Choose language"
+})
+
+LanguageTab:CreateDropdown({
+    Name = "🌍 Language",
+    Options = Languages,
+    CurrentOption = {SelectedLanguage},
+    MultipleOptions = false,
+
+    Callback = function(Value)
+        if type(Value) == "table" then
+            SelectedLanguage = Value[1] or SelectedLanguage
+        elseif type(Value) == "string" then
+            SelectedLanguage = Value
+        end
     end
+})
 
-    local L = GetText()
+local Started = false
 
-    Elements.StatsParagraph:Set({
-        Title = L.StatsTitle,
-        Content =
-            L.Players .. tostring(#Players:GetPlayers()) .. "\n" ..
-            L.Launches .. tostring(TotalLaunches) .. "\n" ..
-            L.Executor .. Executor
-    })
-end
+LanguageTab:CreateButton({
+    Name = "✅ Continue",
 
-local function BuildUI()
-    local L = GetText()
+    Callback = function()
 
-    Tabs.Teleport = Window:CreateTab(L.Teleport, "map-pin")
+        if Started then
+            return
+        end
 
-    Elements.SetPoint = Tabs.Teleport:CreateButton({
-        Name = L.Set,
-        Callback = function()
-            local Character = Player.Character
-            local Root = Character and Character:FindFirstChild("HumanoidRootPart")
+        Started = true
+
+        local Code = Codes[SelectedLanguage] or "ru"
+        local L = T[Code]
+
+        --================================================
+        -- TELEPORT
+        --================================================
+
+        local TeleportTab = Window:CreateTab(
+            L.teleport,
+            4483362458
+        )
+
+        local SavedPoint
+
+        TeleportTab:CreateButton({
+            Name = L.set,
+
+            Callback = function()
+
+                local Character = LocalPlayer.Character
+                local Root = Character
+                    and Character:FindFirstChild("HumanoidRootPart")
+
+                if Root then
+                    SavedPoint = Root.CFrame
+
+                    Rayfield:Notify({
+                        Title = "❄️ WINTER",
+                        Content = L.setDone,
+                        Duration = 2
+                    })
+                end
+            end
+        })
+
+        TeleportTab:CreateButton({
+            Name = L.tp,
+
+            Callback = function()
+
+                local Character = LocalPlayer.Character
+                local Root = Character
+                    and Character:FindFirstChild("HumanoidRootPart")
+
+                if Root and SavedPoint then
+                    Root.CFrame = SavedPoint
+
+                    Rayfield:Notify({
+                        Title = "❄️ WINTER",
+                        Content = L.tpDone,
+                        Duration = 2
+                    })
+                end
+            end
+        })
+
+        --================================================
+        -- FLY
+        --================================================
+
+        local FlyTab = Window:CreateTab(
+            L.fly,
+            4483362458
+        )
+
+        local Flying = false
+        local Speed = 50
+        local Velocity
+        local Gyro
+
+        local function StopFly()
+
+            Flying = false
+
+            if Velocity then
+                Velocity:Destroy()
+                Velocity = nil
+            end
+
+            if Gyro then
+                Gyro:Destroy()
+                Gyro = nil
+            end
+
+            local Character = LocalPlayer.Character
+            local Root = Character
+                and Character:FindFirstChild("HumanoidRootPart")
 
             if Root then
-                Point = Root.CFrame
-
-                Rayfield:Notify({
-                    Title = "❄️ WINTER",
-                    Content = GetText().SetOK,
-                    Duration = 3
-                })
+                Root.AssemblyLinearVelocity = Vector3.zero
             end
         end
-    })
 
-    Elements.TP = Tabs.Teleport:CreateButton({
-        Name = L.TP,
-        Callback = function()
-            local Character = Player.Character
-            local Root = Character and Character:FindFirstChild("HumanoidRootPart")
+        FlyTab:CreateSlider({
+            Name = L.speed,
+            Range = {1, 100},
+            Increment = 1,
+            Suffix = " studs/s",
+            CurrentValue = 50,
 
-            if Root and Point then
-                Root.CFrame = Point
-
-                Rayfield:Notify({
-                    Title = "❄️ WINTER",
-                    Content = GetText().TPOK,
-                    Duration = 3
-                })
-            elseif not Point then
-                Rayfield:Notify({
-                    Title = "❄️ WINTER",
-                    Content = GetText().NoPoint,
-                    Duration = 3
-                })
+            Callback = function(Value)
+                Speed = Value
             end
-        end
-    })
+        })
 
-    Tabs.Languages = Window:CreateTab(L.Languages, "languages")
+        FlyTab:CreateToggle({
+            Name = L.flyOn,
+            CurrentValue = false,
 
-    Tabs.Languages:CreateDropdown({
-        Name = L.Select,
-        Options = {
-            "Русский",
-            "English",
-            "Deutsch",
-            "Español",
-            "Français",
-            "Português",
-            "Türkçe"
-        },
-        CurrentOption = {CurrentLanguage},
-        MultipleOptions = false,
+            Callback = function(Value)
 
-        Callback = function(Option)
-            if type(Option) == "table" then
-                SelectedLanguage = Option[1]
-            else
-                SelectedLanguage = Option
+                if not Value then
+                    StopFly()
+                    return
+                end
+
+                local Character = LocalPlayer.Character
+                local Root = Character
+                    and Character:FindFirstChild("HumanoidRootPart")
+
+                if not Root then
+                    return
+                end
+
+                Flying = true
+
+                Velocity = Instance.new("BodyVelocity")
+                Velocity.MaxForce = Vector3.new(
+                    math.huge,
+                    math.huge,
+                    math.huge
+                )
+                Velocity.Velocity = Vector3.zero
+                Velocity.Parent = Root
+
+                Gyro = Instance.new("BodyGyro")
+                Gyro.MaxTorque = Vector3.new(
+                    math.huge,
+                    math.huge,
+                    math.huge
+                )
+                Gyro.P = 10000
+                Gyro.CFrame = workspace.CurrentCamera.CFrame
+                Gyro.Parent = Root
             end
-        end
-    })
+        })
 
-    Elements.Apply = Tabs.Languages:CreateButton({
-        Name = L.Apply,
+        RunService.RenderStepped:Connect(function()
 
-        Callback = function()
-            if not T[SelectedLanguage] then
+            if not Flying then
                 return
             end
 
-            CurrentLanguage = SelectedLanguage
+            local Character = LocalPlayer.Character
+            local Root = Character
+                and Character:FindFirstChild("HumanoidRootPart")
 
-            local NewL = GetText()
+            local Humanoid = Character
+                and Character:FindFirstChildOfClass("Humanoid")
 
-            Elements.SetPoint:Set(NewL.Set)
-            Elements.TP:Set(NewL.TP)
-            Elements.Apply:Set(NewL.Apply)
+            local CurrentCamera = workspace.CurrentCamera
 
-            if Elements.StatsParagraph then
-                Elements.StatsParagraph:Set({
-                    Title = NewL.StatsTitle,
-                    Content =
-                        NewL.Players .. tostring(#Players:GetPlayers()) .. "\n" ..
-                        NewL.Launches .. tostring(TotalLaunches) .. "\n" ..
-                        NewL.Executor .. Executor
-                })
+            if not Root or not Humanoid or not Velocity or not Gyro then
+                return
             end
 
-            if Elements.Credits then
-                Elements.Credits:Set({
-                    Title = NewL.Credits,
-                    Content =
-                        NewL.Creator .. "\n" ..
-                        NewL.Tester .. "\n" ..
-                        NewL.CoCreator .. "\n\n" ..
-                        NewL.Owner
-                })
+            local CameraCF = CurrentCamera.CFrame
+            local Look = CameraCF.LookVector
+            local Right = CameraCF.RightVector
+
+            local Move = Humanoid.MoveDirection
+            local Direction = Vector3.zero
+
+            if Move.Magnitude > 0 then
+
+                local Forward =
+                    Vector3.new(Look.X, 0, Look.Z)
+
+                local RightFlat =
+                    Vector3.new(Right.X, 0, Right.Z)
+
+                if Forward.Magnitude > 0 then
+                    Forward = Forward.Unit
+                end
+
+                if RightFlat.Magnitude > 0 then
+                    RightFlat = RightFlat.Unit
+                end
+
+                local ForwardAmount = Move:Dot(Forward)
+                local RightAmount = Move:Dot(RightFlat)
+
+                Direction =
+                    Forward * ForwardAmount
+                    + RightFlat * RightAmount
+
+                if Direction.Magnitude > 0 then
+                    Direction = Direction.Unit
+                end
             end
 
-            Rayfield:Notify({
-                Title = "🌐",
-                Content = NewL.Applied,
-                Duration = 3
-            })
-        end
-    })
+            Velocity.Velocity = Direction * Speed
 
-    Tabs.Social = Window:CreateTab(L.Social, "globe")
+            -- Character looks exactly where camera looks
+            Gyro.CFrame = CameraCF
+        end)
 
-    Tabs.Social:CreateButton({
-        Name = L.FunPay,
+        --================================================
+        -- SOCIAL
+        --================================================
 
-        Callback = function()
-            local Link = "https://funpay.com/users/16761126/"
+        local SocialTab = Window:CreateTab(
+            L.social,
+            4483362458
+        )
 
-            if setclipboard then
-                setclipboard(Link)
+        SocialTab:CreateButton({
+            Name = L.funpay,
+
+            Callback = function()
+
+                local Link =
+                    "https://funpay.com/users/16761126/"
+
+                pcall(function()
+                    if setclipboard then
+                        setclipboard(Link)
+                    end
+                end)
 
                 Rayfield:Notify({
-                    Title = "🛒 FunPay",
-                    Content = "Link copied!",
-                    Duration = 3
+                    Title = "FunPay",
+                    Content = L.copied,
+                    Duration = 2
                 })
             end
+        })
+
+        --================================================
+        -- CREDITS
+        --================================================
+
+        local CreditsTab = Window:CreateTab(
+            L.credits,
+            4483362458
+        )
+
+        CreditsTab:CreateParagraph({
+            Title = L.creator,
+            Content = "acou090"
+        })
+
+        CreditsTab:CreateParagraph({
+            Title = L.tester,
+            Content = "acou090"
+        })
+
+        CreditsTab:CreateParagraph({
+            Title = L.cocreator,
+            Content = "ChatGPT"
+        })
+
+        CreditsTab:CreateParagraph({
+            Title = L.owner,
+            Content = "acou090"
+        })
+
+        --================================================
+        -- STATISTICS
+        --================================================
+
+        local StatsTab = Window:CreateTab(
+            L.stats,
+            4483362458
+        )
+
+        getgenv().WinterLaunches =
+            (getgenv().WinterLaunches or 0) + 1
+
+        local Stats = StatsTab:CreateParagraph({
+            Title = L.stats,
+            Content = ""
+        })
+
+        local function GetExecutor()
+
+            if identifyexecutor then
+
+                local Success, Name =
+                    pcall(identifyexecutor)
+
+                if Success and Name then
+                    return tostring(Name)
+                end
+            end
+
+            return "Unknown"
         end
-    })
 
-    Tabs.Stats = Window:CreateTab(L.Stats, "bar-chart-3")
+        local function UpdateStats()
 
-    Elements.StatsParagraph = Tabs.Stats:CreateParagraph({
-        Title = L.StatsTitle,
-        Content =
-            L.Players .. tostring(#Players:GetPlayers()) .. "\n" ..
-            L.Launches .. tostring(TotalLaunches) .. "\n" ..
-            L.Executor .. Executor
-    })
+            Stats:Set({
+                Title = L.stats,
 
-    Tabs.Credits = Window:CreateTab(L.Credits, "users")
+                Content =
+                    L.players
+                    .. ": "
+                    .. tostring(#Players:GetPlayers())
+                    .. "\n"
+                    .. L.executor
+                    .. ": "
+                    .. GetExecutor()
+                    .. "\n"
+                    .. L.launches
+                    .. ": "
+                    .. tostring(getgenv().WinterLaunches)
+            })
+        end
 
-    Elements.Credits = Tabs.Credits:CreateParagraph({
-        Title = L.Credits,
-        Content =
-            L.Creator .. "\n" ..
-            L.Tester .. "\n" ..
-            L.CoCreator .. "\n\n" ..
-            L.Owner
-    })
-end
-
-BuildUI()
-
-Players.PlayerAdded:Connect(UpdateStats)
-Players.PlayerRemoving:Connect(function()
-    task.wait()
-    UpdateStats()
-end)
-
-task.spawn(function()
-    while task.wait(5) do
         UpdateStats()
+
+        task.spawn(function()
+
+            while task.wait(2) do
+
+                if not Started then
+                    break
+                end
+
+                pcall(UpdateStats)
+
+            end
+
+        end)
     end
-end)
+})
