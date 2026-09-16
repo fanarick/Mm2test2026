@@ -1,7 +1,7 @@
 --// ❄️ WINTER
 --// PASSWORD: acou090
---// OWNER: gumbazino1
---// PASSWORD -> LANGUAGE -> MENU
+--// OWNER: acou090
+--// CO-OWNER: gumbazino1
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -11,6 +11,10 @@ local LocalPlayer = Players.LocalPlayer
 local Rayfield = loadstring(game:HttpGet(
     "https://raw.githubusercontent.com/SiriusSoftwareLtd/Rayfield/main/source.lua"
 ))()
+
+--==================================================
+-- WINDOW
+--==================================================
 
 local Window = Rayfield:CreateWindow({
     Name = "❄️ WINTER",
@@ -71,8 +75,6 @@ local Codes = {
 local T = {
 
     ru = {
-        lang = "🌍 Язык",
-        apply = "✅ Выбрать язык",
         teleport = "📍 Телепорт",
         fly = "✈️ Полёт",
         social = "🌐 Соцсети",
@@ -95,6 +97,7 @@ local T = {
         tester = "Тестер",
         cocreator = "Соавтор",
         owner = "Владелец",
+        coowner = "Совладелец",
 
         players = "Игроков на сервере",
         executor = "Экзекутор",
@@ -102,8 +105,6 @@ local T = {
     },
 
     en = {
-        lang = "🌍 Language",
-        apply = "✅ Select Language",
         teleport = "📍 Teleport",
         fly = "✈️ Flight",
         social = "🌐 Social",
@@ -126,6 +127,7 @@ local T = {
         tester = "Tester",
         cocreator = "Co-creator",
         owner = "Owner",
+        coowner = "Co-Owner",
 
         players = "Players on server",
         executor = "Executor",
@@ -133,8 +135,6 @@ local T = {
     },
 
     de = {
-        lang = "🌍 Sprache",
-        apply = "✅ Sprache auswählen",
         teleport = "📍 Teleport",
         fly = "✈️ Flug",
         social = "🌐 Soziales",
@@ -157,6 +157,7 @@ local T = {
         tester = "Tester",
         cocreator = "Mitentwickler",
         owner = "Besitzer",
+        coowner = "Mitbesitzer",
 
         players = "Spieler auf dem Server",
         executor = "Executor",
@@ -164,8 +165,6 @@ local T = {
     },
 
     fr = {
-        lang = "🌍 Langue",
-        apply = "✅ Choisir la langue",
         teleport = "📍 Téléportation",
         fly = "✈️ Vol",
         social = "🌐 Social",
@@ -188,6 +187,7 @@ local T = {
         tester = "Testeur",
         cocreator = "Co-créateur",
         owner = "Propriétaire",
+        coowner = "Co-propriétaire",
 
         players = "Joueurs sur le serveur",
         executor = "Exécuteur",
@@ -195,8 +195,6 @@ local T = {
     },
 
     es = {
-        lang = "🌍 Idioma",
-        apply = "✅ Elegir idioma",
         teleport = "📍 Teletransporte",
         fly = "✈️ Vuelo",
         social = "🌐 Social",
@@ -219,6 +217,7 @@ local T = {
         tester = "Probador",
         cocreator = "Co-creador",
         owner = "Propietario",
+        coowner = "Copropietario",
 
         players = "Jugadores",
         executor = "Ejecutor",
@@ -226,8 +225,6 @@ local T = {
     },
 
     it = {
-        lang = "🌍 Lingua",
-        apply = "✅ Scegli lingua",
         teleport = "📍 Teletrasporto",
         fly = "✈️ Volo",
         social = "🌐 Social",
@@ -250,6 +247,7 @@ local T = {
         tester = "Tester",
         cocreator = "Co-creatore",
         owner = "Proprietario",
+        coowner = "Co-proprietario",
 
         players = "Giocatori",
         executor = "Executor",
@@ -257,8 +255,6 @@ local T = {
     },
 
     pl = {
-        lang = "🌍 Język",
-        apply = "✅ Wybierz język",
         teleport = "📍 Teleportacja",
         fly = "✈️ Lot",
         social = "🌐 Społeczność",
@@ -281,6 +277,7 @@ local T = {
         tester = "Tester",
         cocreator = "Współtwórca",
         owner = "Właściciel",
+        coowner = "Współwłaściciel",
 
         players = "Gracze na serwerze",
         executor = "Executor",
@@ -288,8 +285,6 @@ local T = {
     },
 
     uk = {
-        lang = "🌍 Мова",
-        apply = "✅ Вибрати мову",
         teleport = "📍 Телепорт",
         fly = "✈️ Політ",
         social = "🌐 Соцмережі",
@@ -312,6 +307,7 @@ local T = {
         tester = "Тестер",
         cocreator = "Співавтор",
         owner = "Власник",
+        coowner = "Співвласник",
 
         players = "Гравців на сервері",
         executor = "Екзекутор",
@@ -320,10 +316,10 @@ local T = {
 }
 
 --==================================================
--- LANGUAGE
+-- LANGUAGE TAB
 --==================================================
 
-local SelectedLanguage = Languages[1]
+local SelectedLanguage = "🇷🇺 Русский"
 local Started = false
 
 local LanguageTab = Window:CreateTab(
@@ -461,7 +457,7 @@ LanguageTab:CreateButton({
         end
 
         --==================================================
-        -- CLEAN
+        -- CLEAN FLY
         --==================================================
 
         local function CleanFlyObjects()
@@ -493,7 +489,7 @@ LanguageTab:CreateButton({
         end
 
         --==================================================
-        -- STOP
+        -- STOP FLY
         --==================================================
 
         local function StopFly()
@@ -506,6 +502,7 @@ LanguageTab:CreateButton({
             end
 
             if FlyVelocity then
+
                 pcall(function()
                     FlyVelocity:Destroy()
                 end)
@@ -514,6 +511,7 @@ LanguageTab:CreateButton({
             end
 
             if FlyGyro then
+
                 pcall(function()
                     FlyGyro:Destroy()
                 end)
@@ -543,7 +541,7 @@ LanguageTab:CreateButton({
         end
 
         --==================================================
-        -- CREATE
+        -- CREATE FLY
         --==================================================
 
         local function CreateFlyObjects()
@@ -617,7 +615,7 @@ LanguageTab:CreateButton({
         end
 
         --==================================================
-        -- UPDATE
+        -- FLY UPDATE
         --==================================================
 
         local function UpdateFly()
@@ -654,33 +652,36 @@ LanguageTab:CreateButton({
             local CameraCF =
                 Camera.CFrame
 
-            local LookVector =
+            local Look =
                 CameraCF.LookVector
 
-            local RightVector =
+            local Right =
                 CameraCF.RightVector
 
-            local MoveDirection =
+            local Move =
                 Humanoid.MoveDirection
 
-            local VelocityDirection =
+            local Direction =
                 Vector3.zero
 
-            if MoveDirection.Magnitude > 0.01 then
+            --==================================================
+            -- FULL CAMERA RELATIVE MOVEMENT
+            --==================================================
 
-                -- Горизонтальное направление камеры
+            if Move.Magnitude > 0.01 then
+
                 local FlatLook =
                     Vector3.new(
-                        LookVector.X,
+                        Look.X,
                         0,
-                        LookVector.Z
+                        Look.Z
                     )
 
                 local FlatRight =
                     Vector3.new(
-                        RightVector.X,
+                        Right.X,
                         0,
-                        RightVector.Z
+                        Right.Z
                     )
 
                 if FlatLook.Magnitude > 0.001 then
@@ -693,25 +694,23 @@ LanguageTab:CreateButton({
                         FlatRight.Unit
                 end
 
-                -- WASD / мобильный джойстик
                 local Forward =
-                    MoveDirection:Dot(FlatLook)
+                    Move:Dot(FlatLook)
 
                 local Strafe =
-                    MoveDirection:Dot(FlatRight)
+                    Move:Dot(FlatRight)
 
-                -- Полное направление камеры
-                VelocityDirection =
-                    (LookVector * Forward)
+                Direction =
+                    (Look * Forward)
                     + (FlatRight * Strafe)
 
-                if VelocityDirection.Magnitude > 0.01 then
+                if Direction.Magnitude > 0.01 then
 
-                    VelocityDirection =
-                        VelocityDirection.Unit
+                    Direction =
+                        Direction.Unit
 
                     FlyVelocity.Velocity =
-                        VelocityDirection * FlySpeed
+                        Direction * FlySpeed
 
                 else
 
@@ -725,13 +724,16 @@ LanguageTab:CreateButton({
                     Vector3.zero
             end
 
-            -- Всегда поворачиваем тело по камере
+            --==================================================
+            -- CAMERA ROTATION
+            --==================================================
+
             FlyGyro.CFrame =
                 CameraCF
         end
 
         --==================================================
-        -- SPEED SLIDER
+        -- SPEED
         --==================================================
 
         FlyTab:CreateSlider({
@@ -811,7 +813,7 @@ LanguageTab:CreateButton({
         })
 
         --==================================================
-        -- RESPAWN
+        -- RESPAWN SUPPORT
         --==================================================
 
         LocalPlayer.CharacterAdded:Connect(
@@ -894,6 +896,11 @@ LanguageTab:CreateButton({
 
         CreditsTab:CreateParagraph({
             Title = L.owner,
+            Content = "acou090"
+        })
+
+        CreditsTab:CreateParagraph({
+            Title = L.coowner,
             Content = "gumbazino1"
         })
 
