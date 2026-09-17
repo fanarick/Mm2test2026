@@ -2,6 +2,7 @@
 --// PASSWORD: acou090
 --// OWNER: acou090
 --// CO-OWNER: gumbazino1
+--// TELEPORT + FLY + ESP + SOCIAL + CREDITS + STATS
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -77,6 +78,7 @@ local T = {
     ru = {
         teleport = "📍 Телепорт",
         fly = "✈️ Полёт",
+        esp = "👁 ESP",
         social = "🌐 Соцсети",
         credits = "👑 Создатели",
         stats = "📊 Статистика",
@@ -89,6 +91,13 @@ local T = {
 
         flyOn = "✈️ Полёт",
         speed = "Скорость полёта",
+
+        espOn = "👁 Включить ESP",
+        espNames = "🏷 Показывать ники",
+        espDistance = "📏 Показывать расстояние",
+        espHighlight = "✨ Подсветка игроков",
+        espTeamCheck = "🛡 Не показывать союзников",
+        espMaxDistance = "Максимальная дистанция ESP",
 
         funpay = "💰 FunPay",
         copied = "Ссылка скопирована!",
@@ -107,6 +116,7 @@ local T = {
     en = {
         teleport = "📍 Teleport",
         fly = "✈️ Flight",
+        esp = "👁 ESP",
         social = "🌐 Social",
         credits = "👑 Creators",
         stats = "📊 Statistics",
@@ -119,6 +129,13 @@ local T = {
 
         flyOn = "✈️ Flight",
         speed = "Flight Speed",
+
+        espOn = "👁 Enable ESP",
+        espNames = "🏷 Show Names",
+        espDistance = "📏 Show Distance",
+        espHighlight = "✨ Player Highlight",
+        espTeamCheck = "🛡 Hide Teammates",
+        espMaxDistance = "Maximum ESP Distance",
 
         funpay = "💰 FunPay",
         copied = "Link copied!",
@@ -137,6 +154,7 @@ local T = {
     de = {
         teleport = "📍 Teleport",
         fly = "✈️ Flug",
+        esp = "👁 ESP",
         social = "🌐 Soziales",
         credits = "👑 Ersteller",
         stats = "📊 Statistik",
@@ -149,6 +167,13 @@ local T = {
 
         flyOn = "✈️ Flug",
         speed = "Fluggeschwindigkeit",
+
+        espOn = "👁 ESP aktivieren",
+        espNames = "🏷 Namen anzeigen",
+        espDistance = "📏 Entfernung anzeigen",
+        espHighlight = "✨ Spieler hervorheben",
+        espTeamCheck = "🛡 Teammitglieder ausblenden",
+        espMaxDistance = "Maximale ESP-Distanz",
 
         funpay = "💰 FunPay",
         copied = "Link kopiert!",
@@ -167,6 +192,7 @@ local T = {
     fr = {
         teleport = "📍 Téléportation",
         fly = "✈️ Vol",
+        esp = "👁 ESP",
         social = "🌐 Social",
         credits = "👑 Créateurs",
         stats = "📊 Statistiques",
@@ -179,6 +205,13 @@ local T = {
 
         flyOn = "✈️ Vol",
         speed = "Vitesse de vol",
+
+        espOn = "👁 Activer ESP",
+        espNames = "🏷 Afficher les noms",
+        espDistance = "📏 Afficher la distance",
+        espHighlight = "✨ Surbrillance",
+        espTeamCheck = "🛡 Masquer les alliés",
+        espMaxDistance = "Distance maximale ESP",
 
         funpay = "💰 FunPay",
         copied = "Lien copié !",
@@ -197,6 +230,7 @@ local T = {
     es = {
         teleport = "📍 Teletransporte",
         fly = "✈️ Vuelo",
+        esp = "👁 ESP",
         social = "🌐 Social",
         credits = "👑 Creadores",
         stats = "📊 Estadísticas",
@@ -209,6 +243,13 @@ local T = {
 
         flyOn = "✈️ Vuelo",
         speed = "Velocidad de vuelo",
+
+        espOn = "👁 Activar ESP",
+        espNames = "🏷 Mostrar nombres",
+        espDistance = "📏 Mostrar distancia",
+        espHighlight = "✨ Resaltar jugadores",
+        espTeamCheck = "🛡 Ocultar compañeros",
+        espMaxDistance = "Distancia máxima ESP",
 
         funpay = "💰 FunPay",
         copied = "¡Enlace copiado!",
@@ -227,6 +268,7 @@ local T = {
     it = {
         teleport = "📍 Teletrasporto",
         fly = "✈️ Volo",
+        esp = "👁 ESP",
         social = "🌐 Social",
         credits = "👑 Creatori",
         stats = "📊 Statistiche",
@@ -239,6 +281,13 @@ local T = {
 
         flyOn = "✈️ Volo",
         speed = "Velocità di volo",
+
+        espOn = "👁 Attiva ESP",
+        espNames = "🏷 Mostra nomi",
+        espDistance = "📏 Mostra distanza",
+        espHighlight = "✨ Evidenzia giocatori",
+        espTeamCheck = "🛡 Nascondi compagni",
+        espMaxDistance = "Distanza massima ESP",
 
         funpay = "💰 FunPay",
         copied = "Link copiato!",
@@ -257,6 +306,7 @@ local T = {
     pl = {
         teleport = "📍 Teleportacja",
         fly = "✈️ Lot",
+        esp = "👁 ESP",
         social = "🌐 Społeczność",
         credits = "👑 Twórcy",
         stats = "📊 Statystyki",
@@ -269,6 +319,13 @@ local T = {
 
         flyOn = "✈️ Lot",
         speed = "Prędkość lotu",
+
+        espOn = "👁 Włącz ESP",
+        espNames = "🏷 Pokaż nazwy",
+        espDistance = "📏 Pokaż odległość",
+        espHighlight = "✨ Podświetl graczy",
+        espTeamCheck = "🛡 Ukryj sojuszników",
+        espMaxDistance = "Maksymalny zasięg ESP",
 
         funpay = "💰 FunPay",
         copied = "Link skopiowany!",
@@ -287,6 +344,7 @@ local T = {
     uk = {
         teleport = "📍 Телепорт",
         fly = "✈️ Політ",
+        esp = "👁 ESP",
         social = "🌐 Соцмережі",
         credits = "👑 Творці",
         stats = "📊 Статистика",
@@ -299,6 +357,13 @@ local T = {
 
         flyOn = "✈️ Політ",
         speed = "Швидкість польоту",
+
+        espOn = "👁 Увімкнути ESP",
+        espNames = "🏷 Показувати ніки",
+        espDistance = "📏 Показувати відстань",
+        espHighlight = "✨ Підсвічування гравців",
+        espTeamCheck = "🛡 Не показувати союзників",
+        espMaxDistance = "Максимальна дистанція ESP",
 
         funpay = "💰 FunPay",
         copied = "Посилання скопійовано!",
@@ -316,7 +381,7 @@ local T = {
 }
 
 --==================================================
--- LANGUAGE TAB
+-- LANGUAGE
 --==================================================
 
 local SelectedLanguage = "🇷🇺 Русский"
@@ -435,10 +500,6 @@ LanguageTab:CreateButton({
 
         local PreviousAutoRotate = true
 
-        --==================================================
-        -- CHARACTER
-        --==================================================
-
         local function GetCharacter()
 
             local Character = LocalPlayer.Character
@@ -456,14 +517,9 @@ LanguageTab:CreateButton({
             return Character, Humanoid, Root
         end
 
-        --==================================================
-        -- CLEAN FLY
-        --==================================================
-
         local function CleanFlyObjects()
 
-            local Character =
-                LocalPlayer.Character
+            local Character = LocalPlayer.Character
 
             if not Character then
                 return
@@ -488,10 +544,6 @@ LanguageTab:CreateButton({
             end
         end
 
-        --==================================================
-        -- STOP FLY
-        --==================================================
-
         local function StopFly()
 
             Flying = false
@@ -502,7 +554,6 @@ LanguageTab:CreateButton({
             end
 
             if FlyVelocity then
-
                 pcall(function()
                     FlyVelocity:Destroy()
                 end)
@@ -511,7 +562,6 @@ LanguageTab:CreateButton({
             end
 
             if FlyGyro then
-
                 pcall(function()
                     FlyGyro:Destroy()
                 end)
@@ -531,7 +581,6 @@ LanguageTab:CreateButton({
             end
 
             if Root then
-
                 Root.AssemblyLinearVelocity =
                     Vector3.zero
 
@@ -539,10 +588,6 @@ LanguageTab:CreateButton({
                     Vector3.zero
             end
         end
-
-        --==================================================
-        -- CREATE FLY
-        --==================================================
 
         local function CreateFlyObjects()
 
@@ -577,14 +622,9 @@ LanguageTab:CreateButton({
                     math.huge
                 )
 
-            FlyVelocity.P =
-                125000
-
-            FlyVelocity.Velocity =
-                Vector3.zero
-
-            FlyVelocity.Parent =
-                Root
+            FlyVelocity.P = 125000
+            FlyVelocity.Velocity = Vector3.zero
+            FlyVelocity.Parent = Root
 
             FlyGyro =
                 Instance.new("BodyGyro")
@@ -599,24 +639,13 @@ LanguageTab:CreateButton({
                     math.huge
                 )
 
-            FlyGyro.P =
-                150000
-
-            FlyGyro.D =
-                1500
-
-            FlyGyro.CFrame =
-                workspace.CurrentCamera.CFrame
-
-            FlyGyro.Parent =
-                Root
+            FlyGyro.P = 150000
+            FlyGyro.D = 1500
+            FlyGyro.CFrame = workspace.CurrentCamera.CFrame
+            FlyGyro.Parent = Root
 
             return true
         end
-
-        --==================================================
-        -- FLY UPDATE
-        --==================================================
 
         local function UpdateFly()
 
@@ -661,13 +690,6 @@ LanguageTab:CreateButton({
             local Move =
                 Humanoid.MoveDirection
 
-            local Direction =
-                Vector3.zero
-
-            --==================================================
-            -- FULL CAMERA RELATIVE MOVEMENT
-            --==================================================
-
             if Move.Magnitude > 0.01 then
 
                 local FlatLook =
@@ -685,13 +707,15 @@ LanguageTab:CreateButton({
                     )
 
                 if FlatLook.Magnitude > 0.001 then
-                    FlatLook =
-                        FlatLook.Unit
+                    FlatLook = FlatLook.Unit
+                else
+                    FlatLook = Vector3.new(0, 0, -1)
                 end
 
                 if FlatRight.Magnitude > 0.001 then
-                    FlatRight =
-                        FlatRight.Unit
+                    FlatRight = FlatRight.Unit
+                else
+                    FlatRight = Vector3.new(1, 0, 0)
                 end
 
                 local Forward =
@@ -700,7 +724,7 @@ LanguageTab:CreateButton({
                 local Strafe =
                     Move:Dot(FlatRight)
 
-                Direction =
+                local Direction =
                     (Look * Forward)
                     + (FlatRight * Strafe)
 
@@ -724,17 +748,9 @@ LanguageTab:CreateButton({
                     Vector3.zero
             end
 
-            --==================================================
-            -- CAMERA ROTATION
-            --==================================================
-
             FlyGyro.CFrame =
                 CameraCF
         end
-
-        --==================================================
-        -- SPEED
-        --==================================================
 
         FlyTab:CreateSlider({
 
@@ -762,10 +778,6 @@ LanguageTab:CreateButton({
             end
         })
 
-        --==================================================
-        -- FLY TOGGLE
-        --==================================================
-
         FlyTab:CreateToggle({
 
             Name = L.flyOn,
@@ -775,9 +787,7 @@ LanguageTab:CreateButton({
             Callback = function(Value)
 
                 if not Value then
-
                     StopFly()
-
                     return
                 end
 
@@ -812,12 +822,8 @@ LanguageTab:CreateButton({
             end
         })
 
-        --==================================================
-        -- RESPAWN SUPPORT
-        --==================================================
-
         LocalPlayer.CharacterAdded:Connect(
-            function(Character)
+            function()
 
                 task.wait(0.5)
 
@@ -834,6 +840,603 @@ LanguageTab:CreateButton({
                 end
             end
         )
+
+        --==================================================
+        -- ESP
+        --==================================================
+
+        local ESPTab = Window:CreateTab(
+            L.esp,
+            4483362458
+        )
+
+        local ESPEnabled = false
+        local ESPNames = true
+        local ESPDistance = true
+        local ESPHighlight = true
+        local ESPTeamCheck = false
+        local ESPMaxDistance = 1000
+
+        local ESPObjects = {}
+        local ESPConnection = nil
+        local ESPPlayerConnections = {}
+
+        --==================================================
+        -- ESP CLEAN PLAYER
+        --==================================================
+
+        local function RemoveESP(Player)
+
+            local Data = ESPObjects[Player]
+
+            if Data then
+
+                if Data.Highlight then
+                    pcall(function()
+                        Data.Highlight:Destroy()
+                    end)
+                end
+
+                if Data.Billboard then
+                    pcall(function()
+                        Data.Billboard:Destroy()
+                    end)
+                end
+
+                ESPObjects[Player] = nil
+            end
+        end
+
+        --==================================================
+        -- ESP CREATE
+        --==================================================
+
+        local function CreateESP(Player)
+
+            if Player == LocalPlayer then
+                return
+            end
+
+            RemoveESP(Player)
+
+            local Character =
+                Player.Character
+
+            if not Character then
+                return
+            end
+
+            local Head =
+                Character:FindFirstChild("Head")
+
+            local Root =
+                Character:FindFirstChild("HumanoidRootPart")
+
+            local Humanoid =
+                Character:FindFirstChildOfClass("Humanoid")
+
+            if not Head
+                or not Root
+                or not Humanoid then
+
+                return
+            end
+
+            --==============================================
+            -- HIGHLIGHT
+            --==============================================
+
+            local Highlight =
+                Instance.new("Highlight")
+
+            Highlight.Name =
+                "WinterESPHighlight"
+
+            Highlight.Adornee =
+                Character
+
+            Highlight.DepthMode =
+                Enum.HighlightDepthMode.AlwaysOnTop
+
+            Highlight.FillTransparency =
+                0.65
+
+            Highlight.OutlineTransparency =
+                0
+
+            Highlight.Enabled =
+                ESPHighlight
+
+            Highlight.Parent =
+                Character
+
+            --==============================================
+            -- BILLBOARD
+            --==============================================
+
+            local Billboard =
+                Instance.new("BillboardGui")
+
+            Billboard.Name =
+                "WinterESPBillboard"
+
+            Billboard.Adornee =
+                Head
+
+            Billboard.Size =
+                UDim2.new(
+                    0,
+                    220,
+                    0,
+                    60
+                )
+
+            Billboard.StudsOffset =
+                Vector3.new(
+                    0,
+                    3,
+                    0
+                )
+
+            Billboard.AlwaysOnTop =
+                true
+
+            Billboard.Parent =
+                Head
+
+            local Label =
+                Instance.new("TextLabel")
+
+            Label.Name =
+                "WinterESPText"
+
+            Label.BackgroundTransparency =
+                1
+
+            Label.Size =
+                UDim2.new(
+                    1,
+                    0,
+                    1,
+                    0
+                )
+
+            Label.Font =
+                Enum.Font.GothamBold
+
+            Label.TextScaled =
+                false
+
+            Label.TextSize =
+                14
+
+            Label.TextStrokeTransparency =
+                0
+
+            Label.TextWrapped =
+                true
+
+            Label.Text =
+                Player.Name
+
+            Label.Parent =
+                Billboard
+
+            ESPObjects[Player] = {
+                Highlight = Highlight,
+                Billboard = Billboard,
+                Label = Label,
+                Character = Character,
+                Root = Root,
+                Head = Head
+            }
+        end
+
+        --==================================================
+        -- TEAM CHECK
+        --==================================================
+
+        local function ShouldShowPlayer(Player)
+
+            if Player == LocalPlayer then
+                return false
+            end
+
+            if not ESPEnabled then
+                return false
+            end
+
+            if ESPTeamCheck then
+
+                if LocalPlayer.Team ~= nil
+                    and Player.Team ~= nil
+                    and LocalPlayer.Team == Player.Team then
+
+                    return false
+                end
+            end
+
+            return true
+        end
+
+        --==================================================
+        -- ESP UPDATE
+        --==================================================
+
+        local function UpdateESP()
+
+            if not ESPEnabled then
+                return
+            end
+
+            local MyCharacter =
+                LocalPlayer.Character
+
+            local MyRoot =
+                MyCharacter
+                and MyCharacter:FindFirstChild(
+                    "HumanoidRootPart"
+                )
+
+            for _, Player in ipairs(
+                Players:GetPlayers()
+            ) do
+
+                if Player ~= LocalPlayer then
+
+                    local Character =
+                        Player.Character
+
+                    local Root =
+                        Character
+                        and Character:FindFirstChild(
+                            "HumanoidRootPart"
+                        )
+
+                    local Head =
+                        Character
+                        and Character:FindFirstChild(
+                            "Head"
+                        )
+
+                    if Character
+                        and Root
+                        and Head then
+
+                        if not ESPObjects[Player]
+                            or ESPObjects[Player].Character
+                                ~= Character then
+
+                            CreateESP(Player)
+                        end
+
+                        local Data =
+                            ESPObjects[Player]
+
+                        if Data then
+
+                            local Show =
+                                ShouldShowPlayer(Player)
+
+                            local Distance =
+                                0
+
+                            if MyRoot then
+
+                                Distance =
+                                    (
+                                        MyRoot.Position
+                                        - Root.Position
+                                    ).Magnitude
+                            end
+
+                            if Distance >
+                                ESPMaxDistance then
+
+                                Show = false
+                            end
+
+                            --==================================
+                            -- HIGHLIGHT
+                            --==================================
+
+                            if Data.Highlight then
+
+                                Data.Highlight.Enabled =
+                                    Show
+                                    and ESPHighlight
+                            end
+
+                            --==================================
+                            -- TEXT
+                            --==================================
+
+                            if Data.Billboard then
+
+                                Data.Billboard.Enabled =
+                                    Show
+                                    and (
+                                        ESPNames
+                                        or ESPDistance
+                                    )
+                            end
+
+                            if Data.Label then
+
+                                local TextParts = {}
+
+                                if ESPNames then
+
+                                    table.insert(
+                                        TextParts,
+                                        Player.DisplayName
+                                        .. " ["
+                                        .. Player.Name
+                                        .. "]"
+                                    )
+                                end
+
+                                if ESPDistance then
+
+                                    table.insert(
+                                        TextParts,
+                                        tostring(
+                                            math.floor(
+                                                Distance
+                                            )
+                                        )
+                                        .. " studs"
+                                    )
+                                end
+
+                                Data.Label.Text =
+                                    table.concat(
+                                        TextParts,
+                                        "\n"
+                                    )
+                            end
+                        end
+
+                    else
+
+                        RemoveESP(Player)
+                    end
+                end
+            end
+        end
+
+        --==================================================
+        -- START ESP
+        --==================================================
+
+        local function StartESP()
+
+            ESPEnabled = true
+
+            for _, Player in ipairs(
+                Players:GetPlayers()
+            ) do
+
+                if Player ~= LocalPlayer then
+                    CreateESP(Player)
+                end
+            end
+
+            if ESPConnection then
+                ESPConnection:Disconnect()
+            end
+
+            ESPConnection =
+                RunService.RenderStepped:Connect(
+                    UpdateESP
+                )
+        end
+
+        --==================================================
+        -- STOP ESP
+        --==================================================
+
+        local function StopESP()
+
+            ESPEnabled = false
+
+            if ESPConnection then
+                ESPConnection:Disconnect()
+                ESPConnection = nil
+            end
+
+            for Player, _ in pairs(
+                ESPObjects
+            ) do
+
+                RemoveESP(Player)
+            end
+        end
+
+        --==================================================
+        -- PLAYER ADDED
+        --==================================================
+
+        local function HookPlayer(Player)
+
+            if Player == LocalPlayer then
+                return
+            end
+
+            if ESPPlayerConnections[Player] then
+                ESPPlayerConnections[Player]:Disconnect()
+            end
+
+            ESPPlayerConnections[Player] =
+                Player.CharacterAdded:Connect(
+                    function()
+
+                        task.wait(0.5)
+
+                        if ESPEnabled then
+                            CreateESP(Player)
+                        end
+                    end
+                )
+        end
+
+        for _, Player in ipairs(
+            Players:GetPlayers()
+        ) do
+
+            HookPlayer(Player)
+        end
+
+        Players.PlayerAdded:Connect(
+            function(Player)
+
+                HookPlayer(Player)
+
+                task.wait(0.5)
+
+                if ESPEnabled then
+                    CreateESP(Player)
+                end
+            end
+        )
+
+        Players.PlayerRemoving:Connect(
+            function(Player)
+
+                RemoveESP(Player)
+
+                if ESPPlayerConnections[Player] then
+
+                    ESPPlayerConnections[Player]
+                        :Disconnect()
+
+                    ESPPlayerConnections[Player] =
+                        nil
+                end
+            end
+        )
+
+        --==================================================
+        -- ESP MASTER TOGGLE
+        --==================================================
+
+        ESPTab:CreateToggle({
+
+            Name = L.espOn,
+
+            CurrentValue = false,
+
+            Callback = function(Value)
+
+                if Value then
+                    StartESP()
+                else
+                    StopESP()
+                end
+            end
+        })
+
+        --==================================================
+        -- ESP HIGHLIGHT
+        --==================================================
+
+        ESPTab:CreateToggle({
+
+            Name = L.espHighlight,
+
+            CurrentValue = true,
+
+            Callback = function(Value)
+
+                ESPHighlight = Value
+
+                for _, Data in pairs(
+                    ESPObjects
+                ) do
+
+                    if Data.Highlight then
+
+                        Data.Highlight.Enabled =
+                            ESPEnabled
+                            and ESPHighlight
+                    end
+                end
+            end
+        })
+
+        --==================================================
+        -- ESP NAMES
+        --==================================================
+
+        ESPTab:CreateToggle({
+
+            Name = L.espNames,
+
+            CurrentValue = true,
+
+            Callback = function(Value)
+
+                ESPNames = Value
+            end
+        })
+
+        --==================================================
+        -- ESP DISTANCE
+        --==================================================
+
+        ESPTab:CreateToggle({
+
+            Name = L.espDistance,
+
+            CurrentValue = true,
+
+            Callback = function(Value)
+
+                ESPDistance = Value
+            end
+        })
+
+        --==================================================
+        -- ESP TEAM CHECK
+        --==================================================
+
+        ESPTab:CreateToggle({
+
+            Name = L.espTeamCheck,
+
+            CurrentValue = false,
+
+            Callback = function(Value)
+
+                ESPTeamCheck = Value
+            end
+        })
+
+        --==================================================
+        -- ESP MAX DISTANCE
+        --==================================================
+
+        ESPTab:CreateSlider({
+
+            Name = L.espMaxDistance,
+
+            Range = {
+                50,
+                5000
+            },
+
+            Increment = 50,
+
+            Suffix = " studs",
+
+            CurrentValue = 1000,
+
+            Callback = function(Value)
+
+                ESPMaxDistance =
+                    tonumber(Value) or 1000
+            end
+        })
 
         --==================================================
         -- SOCIAL
