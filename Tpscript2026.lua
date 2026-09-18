@@ -1,19 +1,86 @@
---// ❄️ WINTER
---// PASSWORD: acou090
---// PASSWORD -> COUNTRY -> MENU
+--// ❄️ WINTER V6
+--// Key: acou090
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
 
 local LocalPlayer = Players.LocalPlayer
+local Destroyed = false
+local Connections = {}
 
+--// CLEAN OLD FUNCTIONS
+pcall(function()
+    if getgenv().WinterCleanup then
+        getgenv().WinterCleanup()
+    end
+end)
+
+getgenv().WinterMenuBuilt = false
+
+local function Connect(signal, callback)
+    local connection = signal:Connect(callback)
+    table.insert(Connections, connection)
+    return connection
+end
+
+local function Cleanup()
+    if Destroyed then return end
+    Destroyed = true
+
+    for _, connection in ipairs(Connections) do
+        pcall(function()
+            connection:Disconnect()
+        end)
+    end
+
+    Connections = {}
+
+    local character = LocalPlayer.Character
+
+    if character then
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        local root = character:FindFirstChild("HumanoidRootPart")
+
+        if humanoid then
+            humanoid.PlatformStand = false
+            humanoid.AutoRotate = true
+        end
+
+        if root then
+            for _, object in ipairs(root:GetChildren()) do
+                if object.Name == "WinterFlyVelocity"
+                    or object.Name == "WinterFlyGyro" then
+                    pcall(function()
+                        object:Destroy()
+                    end)
+                end
+            end
+        end
+    end
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player.Character then
+            for _, object in ipairs(player.Character:GetDescendants()) do
+                if object.Name == "WinterESP"
+                    or object.Name == "WinterESPHighlight"
+                    or object.Name == "WinterESPTracer" then
+
+                    pcall(function()
+                        object:Destroy()
+                    end)
+                end
+            end
+        end
+    end
+end
+
+getgenv().WinterCleanup = Cleanup
+
+--// RAYFIELD
 local Rayfield = loadstring(game:HttpGet(
     "https://raw.githubusercontent.com/SiriusSoftwareLtd/Rayfield/main/source.lua"
 ))()
-
---==================================================
--- WINDOW / PASSWORD
---==================================================
 
 local Window = Rayfield:CreateWindow({
     Name = "❄️ WINTER",
@@ -32,8 +99,8 @@ local Window = Rayfield:CreateWindow({
 
     KeySettings = {
         Title = "❄️ WINTER",
-        Subtitle = "Enter Password",
-        Note = "Password: acou090",
+        Subtitle = "Password",
+        Note = "Enter password",
         FileName = "WinterKey",
         SaveKey = false,
         GrabKeyFromSite = false,
@@ -41,22 +108,8 @@ local Window = Rayfield:CreateWindow({
     }
 })
 
---==================================================
--- LANGUAGES
---==================================================
-
+--// LANGUAGES
 local Languages = {
-    "🇷🇺 Русский",
-    "🇬🇧 English",
-    "🇩🇪 Deutsch",
-    "🇫🇷 Français",
-    "🇪🇸 Español",
-    "🇮🇹 Italiano",
-    "🇵🇱 Polski",
-    "🇺🇦 Українська"
-}
-
-local Codes = {
     ["🇷🇺 Русский"] = "ru",
     ["🇬🇧 English"] = "en",
     ["🇩🇪 Deutsch"] = "de",
@@ -67,968 +120,1228 @@ local Codes = {
     ["🇺🇦 Українська"] = "uk"
 }
 
---==================================================
--- TRANSLATIONS
---==================================================
+local LanguageList = {
+    "🇷🇺 Русский",
+    "🇬🇧 English",
+    "🇩🇪 Deutsch",
+    "🇫🇷 Français",
+    "🇪🇸 Español",
+    "🇮🇹 Italiano",
+    "🇵🇱 Polski",
+    "🇺🇦 Українська"
+}
 
 local T = {
 
     ru = {
-        lang = "🌍 Язык",
-        apply = "✅ Выбрать язык",
+        language = "🌍 Язык",
+        languageSection = "Выбор языка",
+        languageInfo = "Выберите язык меню",
+        continueText = "▶️ Продолжить",
+
+        fly = "✈️ Полёт",
+        flyToggle = "Полёт",
+        speed = "Скорость",
 
         teleport = "📍 Телепорт",
-        fly = "✈️ Полёт",
-        social = "🌐 Соцсети",
-        credits = "👑 Создатели",
-        stats = "📊 Статистика",
+        savePoint = "💾 Сохранить точку",
+        teleportPoint = "↩️ Телепорт на точку",
+        player = "👤 Игрок",
+        teleportPlayer = "📍 Телепорт к игроку",
 
-        set = "📍 Поставить точку",
-        tp = "🚀 Телепорт к точке",
-
-        setDone = "Точка поставлена :Þ",
-        tpDone = "Телепортация сделана",
-
-        flyOn = "✈️ Полёт",
-        speed = "Скорость полёта",
+        esp = "👁️ ESP",
+        espToggle = "ESP",
+        box = "📦 Box ESP",
+        tracer = "🦴 Tracers",
+        names = "👤 Имена",
+        health = "❤️ Здоровье",
+        distance = "📏 Дистанция",
+        teamColor = "🎨 Цвет команды",
+        rgb = "🌈 RGB",
 
         funpay = "💰 FunPay",
-        copied = "Ссылка скопирована!",
+        copyFunpay = "📋 Скопировать FunPay",
+        copied = "Ссылка скопирована",
 
-        creator = "Создатель",
-        tester = "Тестер",
-        cocreator = "Соавтор",
-        owner = "Владелец",
+        credits = "👑 Создатели",
+        stats = "📊 Статистика",
+        serverPlayers = "Игроков на сервере",
+        executor = "Экзекьютор",
+        launches = "Запусков",
 
-        players = "Игроков на сервере",
-        executor = "Экзекутор",
-        launches = "Запусков"
+        noPlayer = "Игрок не выбран",
+        noPoint = "Точка не сохранена"
     },
 
     en = {
-        lang = "🌍 Language",
-        apply = "✅ Select Language",
+        language = "🌍 Language",
+        languageSection = "Language Selection",
+        languageInfo = "Select menu language",
+        continueText = "▶️ Continue",
+
+        fly = "✈️ Fly",
+        flyToggle = "Fly",
+        speed = "Speed",
 
         teleport = "📍 Teleport",
-        fly = "✈️ Flight",
-        social = "🌐 Social",
-        credits = "👑 Creators",
-        stats = "📊 Statistics",
+        savePoint = "💾 Save Point",
+        teleportPoint = "↩️ Teleport To Point",
+        player = "👤 Player",
+        teleportPlayer = "📍 Teleport To Player",
 
-        set = "📍 Set Point",
-        tp = "🚀 TP to Point",
-
-        setDone = "Point set :Þ",
-        tpDone = "Teleport completed",
-
-        flyOn = "✈️ Flight",
-        speed = "Flight Speed",
+        esp = "👁️ ESP",
+        espToggle = "ESP",
+        box = "📦 Box ESP",
+        tracer = "🦴 Tracers",
+        names = "👤 Names",
+        health = "❤️ Health",
+        distance = "📏 Distance",
+        teamColor = "🎨 Team Color",
+        rgb = "🌈 RGB",
 
         funpay = "💰 FunPay",
-        copied = "Link copied!",
+        copyFunpay = "📋 Copy FunPay",
+        copied = "Link copied",
 
-        creator = "Creator",
-        tester = "Tester",
-        cocreator = "Co-creator",
-        owner = "Owner",
-
-        players = "Players on server",
+        credits = "👑 Credits",
+        stats = "📊 Statistics",
+        serverPlayers = "Server Players",
         executor = "Executor",
-        launches = "Launches"
+        launches = "Launches",
+
+        noPlayer = "No player selected",
+        noPoint = "Point not saved"
     },
 
     de = {
-        lang = "🌍 Sprache",
-        apply = "✅ Sprache auswählen",
+        language = "🌍 Sprache",
+        languageSection = "Sprachauswahl",
+        languageInfo = "Menüsprache auswählen",
+        continueText = "▶️ Weiter",
+
+        fly = "✈️ Fliegen",
+        flyToggle = "Fliegen",
+        speed = "Geschwindigkeit",
 
         teleport = "📍 Teleport",
-        fly = "✈️ Flug",
-        social = "🌐 Soziales",
-        credits = "👑 Ersteller",
-        stats = "📊 Statistik",
+        savePoint = "💾 Punkt speichern",
+        teleportPoint = "↩️ Zum Punkt teleportieren",
+        player = "👤 Spieler",
+        teleportPlayer = "📍 Zu Spieler teleportieren",
 
-        set = "📍 Punkt setzen",
-        tp = "🚀 Zum Punkt",
-
-        setDone = "Punkt gesetzt :Þ",
-        tpDone = "Teleport abgeschlossen",
-
-        flyOn = "✈️ Flug",
-        speed = "Fluggeschwindigkeit",
+        esp = "👁️ ESP",
+        espToggle = "ESP",
+        box = "📦 Box ESP",
+        tracer = "🦴 Tracers",
+        names = "👤 Namen",
+        health = "❤️ Gesundheit",
+        distance = "📏 Distanz",
+        teamColor = "🎨 Teamfarbe",
+        rgb = "🌈 RGB",
 
         funpay = "💰 FunPay",
-        copied = "Link kopiert!",
+        copyFunpay = "📋 FunPay kopieren",
+        copied = "Link kopiert",
 
-        creator = "Ersteller",
-        tester = "Tester",
-        cocreator = "Mitentwickler",
-        owner = "Besitzer",
-
-        players = "Spieler auf dem Server",
+        credits = "👑 Credits",
+        stats = "📊 Statistik",
+        serverPlayers = "Spieler auf Server",
         executor = "Executor",
-        launches = "Starts"
+        launches = "Starts",
+
+        noPlayer = "Kein Spieler ausgewählt",
+        noPoint = "Punkt nicht gespeichert"
     },
 
     fr = {
-        lang = "🌍 Langue",
-        apply = "✅ Choisir la langue",
+        language = "🌍 Langue",
+        languageSection = "Choix de la langue",
+        languageInfo = "Sélectionnez la langue",
+        continueText = "▶️ Continuer",
+
+        fly = "✈️ Vol",
+        flyToggle = "Vol",
+        speed = "Vitesse",
 
         teleport = "📍 Téléportation",
-        fly = "✈️ Vol",
-        social = "🌐 Social",
-        credits = "👑 Créateurs",
-        stats = "📊 Statistiques",
+        savePoint = "💾 Sauvegarder le point",
+        teleportPoint = "↩️ Téléporter au point",
+        player = "👤 Joueur",
+        teleportPlayer = "📍 Téléporter au joueur",
 
-        set = "📍 Définir le point",
-        tp = "🚀 Aller au point",
-
-        setDone = "Point défini :Þ",
-        tpDone = "Téléportation terminée",
-
-        flyOn = "✈️ Vol",
-        speed = "Vitesse de vol",
+        esp = "👁️ ESP",
+        espToggle = "ESP",
+        box = "📦 Box ESP",
+        tracer = "🦴 Tracers",
+        names = "👤 Noms",
+        health = "❤️ Santé",
+        distance = "📏 Distance",
+        teamColor = "🎨 Couleur équipe",
+        rgb = "🌈 RGB",
 
         funpay = "💰 FunPay",
-        copied = "Lien copié !",
+        copyFunpay = "📋 Copier FunPay",
+        copied = "Lien copié",
 
-        creator = "Créateur",
-        tester = "Testeur",
-        cocreator = "Co-créateur",
-        owner = "Propriétaire",
-
-        players = "Joueurs sur le serveur",
+        credits = "👑 Crédits",
+        stats = "📊 Statistiques",
+        serverPlayers = "Joueurs serveur",
         executor = "Exécuteur",
-        launches = "Lancements"
+        launches = "Lancements",
+
+        noPlayer = "Aucun joueur sélectionné",
+        noPoint = "Point non sauvegardé"
     },
 
     es = {
-        lang = "🌍 Idioma",
-        apply = "✅ Elegir idioma",
+        language = "🌍 Idioma",
+        languageSection = "Selección de idioma",
+        languageInfo = "Selecciona el idioma",
+        continueText = "▶️ Continuar",
+
+        fly = "✈️ Volar",
+        flyToggle = "Volar",
+        speed = "Velocidad",
 
         teleport = "📍 Teletransporte",
-        fly = "✈️ Vuelo",
-        social = "🌐 Social",
-        credits = "👑 Creadores",
-        stats = "📊 Estadísticas",
+        savePoint = "💾 Guardar punto",
+        teleportPoint = "↩️ Teletransportar al punto",
+        player = "👤 Jugador",
+        teleportPlayer = "📍 Teletransportar al jugador",
 
-        set = "📍 Establecer punto",
-        tp = "🚀 Ir al punto",
-
-        setDone = "Punto establecido :Þ",
-        tpDone = "Teletransporte completado",
-
-        flyOn = "✈️ Vuelo",
-        speed = "Velocidad de vuelo",
+        esp = "👁️ ESP",
+        espToggle = "ESP",
+        box = "📦 Box ESP",
+        tracer = "🦴 Tracers",
+        names = "👤 Nombres",
+        health = "❤️ Salud",
+        distance = "📏 Distancia",
+        teamColor = "🎨 Color del equipo",
+        rgb = "🌈 RGB",
 
         funpay = "💰 FunPay",
-        copied = "¡Enlace copiado!",
+        copyFunpay = "📋 Copiar FunPay",
+        copied = "Enlace copiado",
 
-        creator = "Creador",
-        tester = "Probador",
-        cocreator = "Co-creador",
-        owner = "Propietario",
-
-        players = "Jugadores",
+        credits = "👑 Créditos",
+        stats = "📊 Estadísticas",
+        serverPlayers = "Jugadores del servidor",
         executor = "Ejecutor",
-        launches = "Inicios"
+        launches = "Lanzamientos",
+
+        noPlayer = "Ningún jugador seleccionado",
+        noPoint = "Punto no guardado"
     },
 
     it = {
-        lang = "🌍 Lingua",
-        apply = "✅ Scegli lingua",
+        language = "🌍 Lingua",
+        languageSection = "Selezione lingua",
+        languageInfo = "Seleziona la lingua",
+        continueText = "▶️ Continua",
+
+        fly = "✈️ Volo",
+        flyToggle = "Volo",
+        speed = "Velocità",
 
         teleport = "📍 Teletrasporto",
-        fly = "✈️ Volo",
-        social = "🌐 Social",
-        credits = "👑 Creatori",
-        stats = "📊 Statistiche",
+        savePoint = "💾 Salva punto",
+        teleportPoint = "↩️ Teletrasporta al punto",
+        player = "👤 Giocatore",
+        teleportPlayer = "📍 Teletrasporta al giocatore",
 
-        set = "📍 Imposta punto",
-        tp = "🚀 Vai al punto",
-
-        setDone = "Punto impostato :Þ",
-        tpDone = "Teletrasporto completato",
-
-        flyOn = "✈️ Volo",
-        speed = "Velocità di volo",
+        esp = "👁️ ESP",
+        espToggle = "ESP",
+        box = "📦 Box ESP",
+        tracer = "🦴 Tracers",
+        names = "👤 Nomi",
+        health = "❤️ Salute",
+        distance = "📏 Distanza",
+        teamColor = "🎨 Colore squadra",
+        rgb = "🌈 RGB",
 
         funpay = "💰 FunPay",
-        copied = "Link copiato!",
+        copyFunpay = "📋 Copia FunPay",
+        copied = "Link copiato",
 
-        creator = "Creatore",
-        tester = "Tester",
-        cocreator = "Co-creatore",
-        owner = "Proprietario",
-
-        players = "Giocatori",
+        credits = "👑 Crediti",
+        stats = "📊 Statistiche",
+        serverPlayers = "Giocatori server",
         executor = "Executor",
-        launches = "Avvii"
+        launches = "Avvii",
+
+        noPlayer = "Nessun giocatore selezionato",
+        noPoint = "Punto non salvato"
     },
 
     pl = {
-        lang = "🌍 Język",
-        apply = "✅ Wybierz język",
+        language = "🌍 Język",
+        languageSection = "Wybór języka",
+        languageInfo = "Wybierz język menu",
+        continueText = "▶️ Dalej",
 
-        teleport = "📍 Teleportacja",
-        fly = "✈️ Lot",
-        social = "🌐 Społeczność",
-        credits = "👑 Twórcy",
-        stats = "📊 Statystyki",
+        fly = "✈️ Latanie",
+        flyToggle = "Latanie",
+        speed = "Prędkość",
 
-        set = "📍 Ustaw punkt",
-        tp = "🚀 Teleportuj do punktu",
+        teleport = "📍 Teleport",
+        savePoint = "💾 Zapisz punkt",
+        teleportPoint = "↩️ Teleportuj do punktu",
+        player = "👤 Gracz",
+        teleportPlayer = "📍 Teleportuj do gracza",
 
-        setDone = "Punkt ustawiony :Þ",
-        tpDone = "Teleportacja zakończona",
-
-        flyOn = "✈️ Lot",
-        speed = "Prędkość lotu",
+        esp = "👁️ ESP",
+        espToggle = "ESP",
+        box = "📦 Box ESP",
+        tracer = "🦴 Tracers",
+        names = "👤 Nazwy",
+        health = "❤️ Zdrowie",
+        distance = "📏 Odległość",
+        teamColor = "🎨 Kolor drużyny",
+        rgb = "🌈 RGB",
 
         funpay = "💰 FunPay",
-        copied = "Link skopiowany!",
+        copyFunpay = "📋 Kopiuj FunPay",
+        copied = "Link skopiowany",
 
-        creator = "Twórca",
-        tester = "Tester",
-        cocreator = "Współtwórca",
-        owner = "Właściciel",
-
-        players = "Gracze na serwerze",
+        credits = "👑 Twórcy",
+        stats = "📊 Statystyki",
+        serverPlayers = "Gracze serwera",
         executor = "Executor",
-        launches = "Uruchomienia"
+        launches = "Uruchomienia",
+
+        noPlayer = "Nie wybrano gracza",
+        noPoint = "Punkt nie zapisany"
     },
 
     uk = {
-        lang = "🌍 Мова",
-        apply = "✅ Вибрати мову",
+        language = "🌍 Мова",
+        languageSection = "Вибір мови",
+        languageInfo = "Оберіть мову меню",
+        continueText = "▶️ Продовжити",
+
+        fly = "✈️ Політ",
+        flyToggle = "Політ",
+        speed = "Швидкість",
 
         teleport = "📍 Телепорт",
-        fly = "✈️ Політ",
-        social = "🌐 Соцмережі",
-        credits = "👑 Творці",
-        stats = "📊 Статистика",
+        savePoint = "💾 Зберегти точку",
+        teleportPoint = "↩️ Телепорт на точку",
+        player = "👤 Гравець",
+        teleportPlayer = "📍 Телепорт до гравця",
 
-        set = "📍 Встановити точку",
-        tp = "🚀 Телепорт до точки",
-
-        setDone = "Точку встановлено :Þ",
-        tpDone = "Телепортацію виконано",
-
-        flyOn = "✈️ Політ",
-        speed = "Швидкість польоту",
+        esp = "👁️ ESP",
+        espToggle = "ESP",
+        box = "📦 Box ESP",
+        tracer = "🦴 Tracers",
+        names = "👤 Імена",
+        health = "❤️ Здоров'я",
+        distance = "📏 Дистанція",
+        teamColor = "🎨 Колір команди",
+        rgb = "🌈 RGB",
 
         funpay = "💰 FunPay",
-        copied = "Посилання скопійовано!",
+        copyFunpay = "📋 Скопіювати FunPay",
+        copied = "Посилання скопійовано",
 
-        creator = "Творець",
-        tester = "Тестер",
-        cocreator = "Співавтор",
-        owner = "Власник",
+        credits = "👑 Творці",
+        stats = "📊 Статистика",
+        serverPlayers = "Гравців на сервері",
+        executor = "Екзек'ютор",
+        launches = "Запусків",
 
-        players = "Гравців на сервері",
-        executor = "Екзекутор",
-        launches = "Запусків"
+        noPlayer = "Гравця не вибрано",
+        noPoint = "Точку не збережено"
     }
 }
 
---==================================================
--- LANGUAGE SCREEN
---==================================================
+--// LANGUAGE TAB
+local LanguageTab = Window:CreateTab("🌍 Language", "languages")
 
-local SelectedLanguage = "🇷🇺 Русский"
+local SelectedLanguage = "ru"
 
-local LanguageTab = Window:CreateTab(
-    "🌍 Language",
-    4483362458
-)
+LanguageTab:CreateSection("❄️ WINTER")
 
 LanguageTab:CreateParagraph({
-    Title = "❄️ WINTER",
-    Content = "Выберите язык / Choose language"
+    Title = "🌍 Language",
+    Content = "Select your language"
 })
 
 LanguageTab:CreateDropdown({
     Name = "🌍 Language",
-    Options = Languages,
-    CurrentOption = {SelectedLanguage},
+    Options = LanguageList,
+    CurrentOption = {"🇷🇺 Русский"},
     MultipleOptions = false,
 
-    Callback = function(Value)
-
-        if type(Value) == "table" then
-            SelectedLanguage = Value[1] or SelectedLanguage
-
-        elseif type(Value) == "string" then
-            SelectedLanguage = Value
+    Callback = function(option)
+        if type(option) == "table" then
+            option = option[1]
         end
+
+        SelectedLanguage = Languages[option] or "ru"
     end
 })
 
-local Started = false
+--// BUILD
+local function BuildMenu(lang)
 
-LanguageTab:CreateButton({
-    Name = "✅ Continue",
+    if getgenv().WinterMenuBuilt then
+        return
+    end
 
-    Callback = function()
+    if Destroyed then
+        return
+    end
 
-        if Started then
+    getgenv().WinterMenuBuilt = true
+
+    local t = T[lang] or T.ru
+
+    --==================================================
+    -- FLY
+    --==================================================
+
+    local FlyTab = Window:CreateTab(t.fly, "plane")
+
+    local Flying = false
+    local FlySpeed = 50
+    local FlyVelocity = nil
+    local FlyGyro = nil
+
+    local function StopFly()
+
+        Flying = false
+
+        if FlyVelocity then
+            pcall(function()
+                FlyVelocity:Destroy()
+            end)
+
+            FlyVelocity = nil
+        end
+
+        if FlyGyro then
+            pcall(function()
+                FlyGyro:Destroy()
+            end)
+
+            FlyGyro = nil
+        end
+
+        local character = LocalPlayer.Character
+
+        if character then
+            local humanoid =
+                character:FindFirstChildOfClass("Humanoid")
+
+            if humanoid then
+                humanoid.PlatformStand = false
+                humanoid.AutoRotate = true
+            end
+        end
+    end
+
+    local function StartFly()
+
+        StopFly()
+
+        local character = LocalPlayer.Character
+
+        if not character then
             return
         end
 
-        Started = true
+        local root =
+            character:FindFirstChild("HumanoidRootPart")
 
-        local Code = Codes[SelectedLanguage] or "ru"
-        local L = T[Code]
+        local humanoid =
+            character:FindFirstChildOfClass("Humanoid")
 
-        --==================================================
-        -- TELEPORT
-        --==================================================
-
-        local TeleportTab = Window:CreateTab(
-            L.teleport,
-            4483362458
-        )
-
-        local SavedPoint = nil
-
-        TeleportTab:CreateButton({
-            Name = L.set,
-
-            Callback = function()
-
-                local Character = LocalPlayer.Character
-                local Root = Character
-                    and Character:FindFirstChild("HumanoidRootPart")
-
-                if Root then
-
-                    SavedPoint = Root.CFrame
-
-                    Rayfield:Notify({
-                        Title = "❄️ WINTER",
-                        Content = L.setDone,
-                        Duration = 2
-                    })
-                end
-            end
-        })
-
-        TeleportTab:CreateButton({
-            Name = L.tp,
-
-            Callback = function()
-
-                local Character = LocalPlayer.Character
-                local Root = Character
-                    and Character:FindFirstChild("HumanoidRootPart")
-
-                if Root and SavedPoint then
-
-                    Root.CFrame = SavedPoint
-
-                    Rayfield:Notify({
-                        Title = "❄️ WINTER",
-                        Content = L.tpDone,
-                        Duration = 2
-                    })
-                end
-            end
-        })
-
-        --==================================================
-        -- FLY
-        --==================================================
-
-        local FlyTab = Window:CreateTab(
-            L.fly,
-            4483362458
-        )
-
-        local Flying = false
-        local Speed = 50
-
-        local Velocity = nil
-        local Gyro = nil
-        local FlyConnection = nil
-
-        local OldAutoRotate = true
-
-        --==================================================
-        -- GET CHARACTER
-        --==================================================
-
-        local function GetCharacter()
-
-            local Character = LocalPlayer.Character
-
-            if not Character then
-                return nil, nil, nil
-            end
-
-            local Humanoid =
-                Character:FindFirstChildOfClass("Humanoid")
-
-            local Root =
-                Character:FindFirstChild("HumanoidRootPart")
-
-            return Character, Humanoid, Root
+        if not root or not humanoid then
+            return
         end
 
-        --==================================================
-        -- REMOVE OLD FLY OBJECTS
-        --==================================================
+        Flying = true
 
-        local function CleanupFlyObjects()
+        humanoid.PlatformStand = true
+        humanoid.AutoRotate = false
 
-            local Character =
-                LocalPlayer.Character
+        FlyVelocity = Instance.new("BodyVelocity")
+        FlyVelocity.Name = "WinterFlyVelocity"
+        FlyVelocity.MaxForce =
+            Vector3.new(math.huge, math.huge, math.huge)
+        FlyVelocity.P = 25000
+        FlyVelocity.Velocity = Vector3.zero
+        FlyVelocity.Parent = root
 
-            if not Character then
-                return
-            end
+        FlyGyro = Instance.new("BodyGyro")
+        FlyGyro.Name = "WinterFlyGyro"
+        FlyGyro.MaxTorque =
+            Vector3.new(math.huge, math.huge, math.huge)
+        FlyGyro.P = 30000
+        FlyGyro.D = 800
+        FlyGyro.Parent = root
+    end
 
-            local Root =
-                Character:FindFirstChild("HumanoidRootPart")
+    FlyTab:CreateToggle({
+        Name = "✈️ " .. t.flyToggle,
+        CurrentValue = false,
 
-            if not Root then
-                return
-            end
+        Callback = function(value)
 
-            for _, Object in ipairs(Root:GetChildren()) do
-
-                if Object.Name == "WinterFlyVelocity"
-                    or Object.Name == "WinterFlyGyro" then
-
-                    pcall(function()
-                        Object:Destroy()
-                    end)
-                end
-            end
-        end
-
-        --==================================================
-        -- STOP FLY
-        --==================================================
-
-        local function StopFly()
-
-            Flying = false
-
-            if FlyConnection then
-                FlyConnection:Disconnect()
-                FlyConnection = nil
-            end
-
-            if Velocity then
-                pcall(function()
-                    Velocity:Destroy()
-                end)
-
-                Velocity = nil
-            end
-
-            if Gyro then
-                pcall(function()
-                    Gyro:Destroy()
-                end)
-
-                Gyro = nil
-            end
-
-            CleanupFlyObjects()
-
-            local Character,
-                Humanoid,
-                Root = GetCharacter()
-
-            if Humanoid then
-                Humanoid.AutoRotate = OldAutoRotate
-            end
-
-            if Root then
-                Root.AssemblyLinearVelocity =
-                    Vector3.zero
-            end
-        end
-
-        --==================================================
-        -- CREATE FLY OBJECTS
-        --==================================================
-
-        local function CreateFlyObjects()
-
-            local Character,
-                Humanoid,
-                Root = GetCharacter()
-
-            if not Character
-                or not Humanoid
-                or not Root then
-
-                return false
-            end
-
-            CleanupFlyObjects()
-
-            OldAutoRotate =
-                Humanoid.AutoRotate
-
-            Humanoid.AutoRotate = false
-
-            --==============================================
-            -- BODY VELOCITY
-            --==============================================
-
-            Velocity = Instance.new("BodyVelocity")
-
-            Velocity.Name =
-                "WinterFlyVelocity"
-
-            Velocity.MaxForce =
-                Vector3.new(
-                    math.huge,
-                    math.huge,
-                    math.huge
-                )
-
-            Velocity.P =
-                100000
-
-            Velocity.Velocity =
-                Vector3.zero
-
-            Velocity.Parent =
-                Root
-
-            --==============================================
-            -- BODY GYRO
-            --==============================================
-
-            Gyro = Instance.new("BodyGyro")
-
-            Gyro.Name =
-                "WinterFlyGyro"
-
-            Gyro.MaxTorque =
-                Vector3.new(
-                    math.huge,
-                    math.huge,
-                    math.huge
-                )
-
-            Gyro.P =
-                100000
-
-            Gyro.D =
-                1000
-
-            Gyro.CFrame =
-                workspace.CurrentCamera.CFrame
-
-            Gyro.Parent =
-                Root
-
-            return true
-        end
-
-        --==================================================
-        -- FLY MOVEMENT
-        --==================================================
-
-        local function UpdateFly()
-
-            if not Flying then
-                return
-            end
-
-            local Character,
-                Humanoid,
-                Root = GetCharacter()
-
-            local Camera =
-                workspace.CurrentCamera
-
-            if not Character
-                or not Humanoid
-                or not Root
-                or not Camera then
-
-                return
-            end
-
-            --==============================================
-            -- RECREATE OBJECTS AFTER RESPAWN
-            --==============================================
-
-            if not Velocity
-                or not Velocity.Parent
-                or not Gyro
-                or not Gyro.Parent then
-
-                if not CreateFlyObjects() then
-                    return
-                end
-            end
-
-            local CameraCF =
-                Camera.CFrame
-
-            local Look =
-                CameraCF.LookVector
-
-            local Right =
-                CameraCF.RightVector
-
-            --==============================================
-            -- FLAT CAMERA DIRECTIONS
-            --==============================================
-
-            local FlatLook =
-                Vector3.new(
-                    Look.X,
-                    0,
-                    Look.Z
-                )
-
-            local FlatRight =
-                Vector3.new(
-                    Right.X,
-                    0,
-                    Right.Z
-                )
-
-            if FlatLook.Magnitude < 0.001 then
-                FlatLook =
-                    Vector3.new(
-                        0,
-                        0,
-                        -1
-                    )
+            if value then
+                StartFly()
             else
-                FlatLook =
-                    FlatLook.Unit
+                StopFly()
             end
 
-            if FlatRight.Magnitude < 0.001 then
-                FlatRight =
-                    Vector3.new(
-                        1,
-                        0,
-                        0
-                    )
-            else
-                FlatRight =
-                    FlatRight.Unit
-            end
+        end
+    })
 
-            --==============================================
-            -- MOBILE JOYSTICK / WASD
-            --==============================================
+    FlyTab:CreateSlider({
+        Name = "⚡ " .. t.speed,
+        Range = {10, 100},
+        Increment = 1,
+        Suffix = " studs/s",
+        CurrentValue = 50,
 
-            local Move =
-                Humanoid.MoveDirection
+        Callback = function(value)
+            FlySpeed = value
+        end
+    })
 
-            local Direction =
-                Vector3.zero
+    Connect(RunService.RenderStepped, function()
 
-            if Move.Magnitude > 0.01 then
-
-                -- Forward/backward input
-                local ForwardAmount =
-                    Move:Dot(FlatLook)
-
-                -- Left/right input
-                local RightAmount =
-                    Move:Dot(FlatRight)
-
-                --==========================================
-                -- CAMERA-RELATIVE 3D FLIGHT
-                --==========================================
-
-                Direction =
-                    (Look * ForwardAmount)
-                    + (FlatRight * RightAmount)
-
-                if Direction.Magnitude > 0.01 then
-                    Direction =
-                        Direction.Unit
-                else
-                    Direction =
-                        Vector3.zero
-                end
-            end
-
-            --==============================================
-            -- APPLY REAL FLIGHT VELOCITY
-            --==============================================
-
-            Velocity.Velocity =
-                Direction * Speed
-
-            --==============================================
-            -- ROTATE CHARACTER WITH CAMERA
-            --==============================================
-
-            Gyro.CFrame =
-                CameraCF
+        if not Flying or Destroyed then
+            return
         end
 
-        --==================================================
-        -- SPEED
-        --==================================================
+        local character = LocalPlayer.Character
 
-        FlyTab:CreateSlider({
+        if not character then
+            return
+        end
 
-            Name = L.speed,
+        local root =
+            character:FindFirstChild("HumanoidRootPart")
 
-            Range = {
-                1,
-                100
-            },
+        local humanoid =
+            character:FindFirstChildOfClass("Humanoid")
 
-            Increment = 1,
+        local camera = Workspace.CurrentCamera
 
-            Suffix = " studs/s",
+        if not root or not humanoid or not camera then
+            return
+        end
 
-            CurrentValue = 50,
+        if not FlyVelocity or not FlyGyro then
+            return
+        end
 
-            Callback = function(Value)
+        local direction = humanoid.MoveDirection
 
-                Speed =
-                    math.clamp(
-                        tonumber(Value) or 50,
-                        1,
-                        100
-                    )
+        if direction.Magnitude > 0 then
+            FlyVelocity.Velocity =
+                direction.Unit * FlySpeed
+        else
+            FlyVelocity.Velocity = Vector3.zero
+        end
+
+        local look = camera.CFrame.LookVector
+
+        FlyGyro.CFrame =
+            CFrame.lookAt(
+                root.Position,
+                root.Position + look
+            )
+    end)
+
+    Connect(LocalPlayer.CharacterAdded, function()
+
+        task.wait(0.5)
+
+        if Flying then
+            StartFly()
+        end
+
+    end)
+
+    --==================================================
+    -- TELEPORT
+    --==================================================
+
+    local TeleportTab =
+        Window:CreateTab(t.teleport, "map-pin")
+
+    local SavedPoint = nil
+    local SelectedPlayer = nil
+
+    local function GetPlayers()
+
+        local result = {}
+
+        for _, player in ipairs(Players:GetPlayers()) do
+
+            if player ~= LocalPlayer then
+                table.insert(result, player.Name)
             end
-        })
 
-        --==================================================
-        -- FLY TOGGLE
-        --==================================================
+        end
 
-        FlyTab:CreateToggle({
+        if #result == 0 then
+            table.insert(result, "No players")
+        end
 
-            Name = L.flyOn,
+        return result
+    end
 
-            CurrentValue = false,
+    TeleportTab:CreateButton({
+        Name = t.savePoint,
 
-            Callback = function(Value)
+        Callback = function()
 
-                if not Value then
+            local character = LocalPlayer.Character
 
-                    StopFly()
+            local root =
+                character
+                and character:FindFirstChild("HumanoidRootPart")
 
-                    return
-                end
+            if root then
 
-                local Character,
-                    Humanoid,
-                    Root = GetCharacter()
-
-                if not Character
-                    or not Humanoid
-                    or not Root then
-
-                    return
-                end
-
-                Flying = true
-
-                if not CreateFlyObjects() then
-                    Flying = false
-                    return
-                end
-
-                --==========================================
-                -- UPDATE LOOP
-                --==========================================
-
-                if FlyConnection then
-                    FlyConnection:Disconnect()
-                end
-
-                FlyConnection =
-                    RunService.RenderStepped:Connect(
-                        UpdateFly
-                    )
-            end
-        })
-
-        --==================================================
-        -- CHARACTER RESPAWN SUPPORT
-        --==================================================
-
-        LocalPlayer.CharacterAdded:Connect(
-            function(Character)
-
-                task.wait(0.5)
-
-                if Flying then
-
-                    CleanupFlyObjects()
-
-                    task.wait(0.1)
-
-                    if Flying then
-                        CreateFlyObjects()
-                    end
-                end
-            end
-        )
-
-        --==================================================
-        -- SOCIAL
-        --==================================================
-
-        local SocialTab = Window:CreateTab(
-            L.social,
-            4483362458
-        )
-
-        SocialTab:CreateButton({
-
-            Name = L.funpay,
-
-            Callback = function()
-
-                local Link =
-                    "https://funpay.com/users/16761126/"
-
-                pcall(function()
-
-                    if setclipboard then
-                        setclipboard(Link)
-                    elseif toclipboard then
-                        toclipboard(Link)
-                    end
-                end)
+                SavedPoint = root.CFrame
 
                 Rayfield:Notify({
-                    Title = "FunPay",
-                    Content = L.copied,
+                    Title = "❄️ WINTER",
+                    Content = "Point saved!",
                     Duration = 2
                 })
+
             end
-        })
+        end
+    })
 
-        --==================================================
-        -- CREDITS
-        --==================================================
+    TeleportTab:CreateButton({
+        Name = t.teleportPoint,
 
-        local CreditsTab = Window:CreateTab(
-            L.credits,
-            4483362458
-        )
+        Callback = function()
 
-        CreditsTab:CreateParagraph({
-            Title = L.creator,
-            Content = "acou090"
-        })
+            if not SavedPoint then
 
-        CreditsTab:CreateParagraph({
-            Title = L.tester,
-            Content = "acou090"
-        })
+                Rayfield:Notify({
+                    Title = "❄️ WINTER",
+                    Content = t.noPoint,
+                    Duration = 2
+                })
 
-        CreditsTab:CreateParagraph({
-            Title = L.cocreator,
-            Content = "ChatGPT"
-        })
-
-        CreditsTab:CreateParagraph({
-            Title = L.owner,
-            Content = "acou090"
-        })
-
-        --==================================================
-        -- STATISTICS
-        --==================================================
-
-        local StatsTab = Window:CreateTab(
-            L.stats,
-            4483362458
-        )
-
-        getgenv().WinterLaunches =
-            (getgenv().WinterLaunches or 0) + 1
-
-        local Stats =
-            StatsTab:CreateParagraph({
-                Title = L.stats,
-                Content = ""
-            })
-
-        --==================================================
-        -- EXECUTOR
-        --==================================================
-
-        local function GetExecutor()
-
-            if identifyexecutor then
-
-                local Success,
-                    Name =
-                    pcall(identifyexecutor)
-
-                if Success and Name then
-                    return tostring(Name)
-                end
+                return
             end
 
-            return "Unknown"
+            local character = LocalPlayer.Character
+
+            local root =
+                character
+                and character:FindFirstChild("HumanoidRootPart")
+
+            if root then
+                root.CFrame = SavedPoint
+            end
+
+        end
+    })
+
+    TeleportTab:CreateDropdown({
+        Name = t.player,
+        Options = GetPlayers(),
+        CurrentOption = {},
+        MultipleOptions = false,
+
+        Callback = function(option)
+
+            if type(option) == "table" then
+                option = option[1]
+            end
+
+            SelectedPlayer = option
+
+        end
+    })
+
+    TeleportTab:CreateButton({
+        Name = t.teleportPlayer,
+
+        Callback = function()
+
+            if not SelectedPlayer
+                or SelectedPlayer == "No players" then
+
+                Rayfield:Notify({
+                    Title = "❄️ WINTER",
+                    Content = t.noPlayer,
+                    Duration = 2
+                })
+
+                return
+            end
+
+            local target =
+                Players:FindFirstChild(SelectedPlayer)
+
+            local targetCharacter =
+                target and target.Character
+
+            local targetRoot =
+                targetCharacter
+                and targetCharacter:FindFirstChild("HumanoidRootPart")
+
+            local character = LocalPlayer.Character
+
+            local root =
+                character
+                and character:FindFirstChild("HumanoidRootPart")
+
+            if root and targetRoot then
+
+                root.CFrame =
+                    targetRoot.CFrame
+                    + Vector3.new(0, 3, 0)
+
+            end
+        end
+    })
+
+    --==================================================
+    -- ESP
+    --==================================================
+
+    local ESPTab =
+        Window:CreateTab(t.esp, "eye")
+
+    local ESPEnabled = false
+    local BoxEnabled = true
+    local TracerEnabled = false
+    local NameEnabled = true
+    local HealthEnabled = false
+    local DistanceEnabled = true
+    local TeamColorEnabled = false
+    local RGBEnabled = false
+
+    local ESPData = {}
+
+    local function RemoveESP(player)
+
+        local data = ESPData[player]
+
+        if not data then
+            return
         end
 
-        --==================================================
-        -- UPDATE STATS
-        --==================================================
+        for _, object in pairs(data) do
 
-        local function UpdateStats()
+            pcall(function()
+                object:Destroy()
+            end)
 
-            Stats:Set({
-
-                Title = L.stats,
-
-                Content =
-                    L.players
-                    .. ": "
-                    .. tostring(
-                        #Players:GetPlayers()
-                    )
-
-                    .. "\n"
-
-                    .. L.executor
-                    .. ": "
-                    .. GetExecutor()
-
-                    .. "\n"
-
-                    .. L.launches
-                    .. ": "
-                    .. tostring(
-                        getgenv().WinterLaunches
-                    )
-            })
         end
 
-        UpdateStats()
+        ESPData[player] = nil
+    end
 
-        --==================================================
-        -- LIVE STATISTICS
-        --==================================================
+    local function GetColor(player)
 
-        task.spawn(function()
+        if RGBEnabled then
 
-            while Started do
+            return Color3.fromHSV(
+                (tick() % 5) / 5,
+                1,
+                1
+            )
+        end
 
-                task.wait(2)
+        if TeamColorEnabled and player.Team then
+            return player.Team.TeamColor.Color
+        end
 
-                if not Started then
-                    break
+        return Color3.new(1, 1, 1)
+    end
+
+    local function CreateESP(player)
+
+        if player == LocalPlayer then
+            return
+        end
+
+        if not ESPEnabled then
+            return
+        end
+
+        RemoveESP(player)
+
+        local character = player.Character
+
+        if not character then
+            return
+        end
+
+        local head =
+            character:FindFirstChild("Head")
+
+        local root =
+            character:FindFirstChild("HumanoidRootPart")
+
+        if not head or not root then
+            return
+        end
+
+        local data = {}
+
+        --// BOX
+        if BoxEnabled then
+
+            local highlight = Instance.new("Highlight")
+
+            highlight.Name = "WinterESPHighlight"
+            highlight.Adornee = character
+            highlight.DepthMode =
+                Enum.HighlightDepthMode.AlwaysOnTop
+
+            highlight.FillTransparency = 0.85
+            highlight.OutlineTransparency = 0.25
+
+            highlight.Parent = character
+
+            data.Highlight = highlight
+        end
+
+        --// TEXT
+        if NameEnabled
+            or HealthEnabled
+            or DistanceEnabled then
+
+            local gui = Instance.new("BillboardGui")
+
+            gui.Name = "WinterESP"
+            gui.Adornee = head
+            gui.Size = UDim2.fromOffset(140, 40)
+            gui.StudsOffset =
+                Vector3.new(0, 2.2, 0)
+
+            gui.AlwaysOnTop = true
+            gui.MaxDistance = 1500
+            gui.Parent = head
+
+            local label =
+                Instance.new("TextLabel")
+
+            label.BackgroundTransparency = 1
+            label.Size = UDim2.fromScale(1, 1)
+            label.Font = Enum.Font.GothamBold
+            label.TextScaled = false
+            label.TextSize = 12
+            label.TextStrokeTransparency = 0.5
+            label.TextWrapped = false
+
+            label.Parent = gui
+
+            data.Gui = gui
+            data.Label = label
+        end
+
+        --// TRACER
+        if TracerEnabled then
+
+            local attachment =
+                Instance.new("Attachment")
+
+            attachment.Name =
+                "WinterESPTracer"
+
+            attachment.Parent = root
+
+            data.Attachment = attachment
+        end
+
+        ESPData[player] = data
+    end
+
+    local function RefreshESP()
+
+        for player in pairs(ESPData) do
+            RemoveESP(player)
+        end
+
+        if not ESPEnabled then
+            return
+        end
+
+        for _, player in ipairs(Players:GetPlayers()) do
+
+            if player ~= LocalPlayer then
+                CreateESP(player)
+            end
+
+        end
+    end
+
+    ESPTab:CreateToggle({
+        Name = "👁️ " .. t.espToggle,
+        CurrentValue = false,
+
+        Callback = function(value)
+
+            ESPEnabled = value
+
+            RefreshESP()
+
+        end
+    })
+
+    ESPTab:CreateToggle({
+        Name = t.box,
+        CurrentValue = true,
+
+        Callback = function(value)
+
+            BoxEnabled = value
+
+            RefreshESP()
+
+        end
+    })
+
+    ESPTab:CreateToggle({
+        Name = t.tracer,
+        CurrentValue = false,
+
+        Callback = function(value)
+
+            TracerEnabled = value
+
+            RefreshESP()
+
+        end
+    })
+
+    ESPTab:CreateToggle({
+        Name = t.names,
+        CurrentValue = true,
+
+        Callback = function(value)
+
+            NameEnabled = value
+
+            RefreshESP()
+
+        end
+    })
+
+    ESPTab:CreateToggle({
+        Name = t.health,
+        CurrentValue = false,
+
+        Callback = function(value)
+
+            HealthEnabled = value
+
+            RefreshESP()
+
+        end
+    })
+
+    ESPTab:CreateToggle({
+        Name = t.distance,
+        CurrentValue = true,
+
+        Callback = function(value)
+
+            DistanceEnabled = value
+
+            RefreshESP()
+
+        end
+    })
+
+    ESPTab:CreateToggle({
+        Name = t.teamColor,
+        CurrentValue = false,
+
+        Callback = function(value)
+
+            TeamColorEnabled = value
+
+            RefreshESP()
+
+        end
+    })
+
+    ESPTab:CreateToggle({
+        Name = t.rgb,
+        CurrentValue = false,
+
+        Callback = function(value)
+
+            RGBEnabled = value
+
+            RefreshESP()
+
+        end
+    })
+
+    Connect(Players.PlayerAdded, function(player)
+
+        task.wait(1)
+
+        if ESPEnabled then
+            CreateESP(player)
+        end
+
+    end)
+
+    Connect(Players.PlayerRemoving, function(player)
+
+        RemoveESP(player)
+
+    end)
+
+    Connect(RunService.RenderStepped, function()
+
+        if not ESPEnabled then
+            return
+        end
+
+        local localCharacter =
+            LocalPlayer.Character
+
+        local localRoot =
+            localCharacter
+            and localCharacter:FindFirstChild("HumanoidRootPart")
+
+        for player, data in pairs(ESPData) do
+
+            local character = player.Character
+
+            local root =
+                character
+                and character:FindFirstChild("HumanoidRootPart")
+
+            local head =
+                character
+                and character:FindFirstChild("Head")
+
+            if not character
+                or not root
+                or not head then
+
+                CreateESP(player)
+
+                continue
+            end
+
+            local color = GetColor(player)
+
+            if data.Highlight then
+
+                data.Highlight.FillColor = color
+                data.Highlight.OutlineColor = color
+
+            end
+
+            if data.Label then
+
+                local text = {}
+
+                if NameEnabled then
+                    table.insert(text, player.Name)
                 end
 
-                pcall(UpdateStats)
+                if HealthEnabled then
+
+                    local humanoid =
+                        character:FindFirstChildOfClass("Humanoid")
+
+                    if humanoid then
+
+                        table.insert(
+                            text,
+                            "❤ "
+                                .. math.floor(humanoid.Health)
+                        )
+
+                    end
+                end
+
+                if DistanceEnabled and localRoot then
+
+                    local distance =
+                        math.floor(
+                            (
+                                localRoot.Position
+                                - root.Position
+                            ).Magnitude
+                        )
+
+                    table.insert(
+                        text,
+                        "📏 "
+                            .. distance
+                            .. "m"
+                    )
+                end
+
+                data.Label.Text =
+                    table.concat(text, " | ")
+
+                data.Label.TextColor3 = color
             end
-        end)
+        end
+    end)
+
+    --==================================================
+    -- FUNPAY
+    --==================================================
+
+    local FunPayTab =
+        Window:CreateTab(t.funpay, "coins")
+
+    FunPayTab:CreateButton({
+        Name = t.copyFunpay,
+
+        Callback = function()
+
+            local link =
+                "https://funpay.com/users/16761126/"
+
+            pcall(function()
+
+                if setclipboard then
+                    setclipboard(link)
+                elseif toclipboard then
+                    toclipboard(link)
+                end
+
+            end)
+
+            Rayfield:Notify({
+                Title = "❄️ WINTER",
+                Content = t.copied,
+                Duration = 3
+            })
+        end
+    })
+
+    --==================================================
+    -- CREDITS
+    --==================================================
+
+    local CreditsTab =
+        Window:CreateTab(t.credits, "crown")
+
+    CreditsTab:CreateParagraph({
+        Title = "❄️ WINTER",
+
+        Content =
+            "Creator: acou090\n"
+            .. "Tester: acou090\n"
+            .. "Co-creator: ChatGPT\n"
+            .. "Owner: acou090\n"
+            .. "Co-Owner: gumbazino1"
+    })
+
+    --==================================================
+    -- STATISTICS
+    --==================================================
+
+    local StatsTab =
+        Window:CreateTab(t.stats, "bar-chart-3")
+
+    local executor = "Unknown"
+
+    pcall(function()
+
+        if identifyexecutor then
+            executor = identifyexecutor()
+        end
+
+    end)
+
+    getgenv().WinterLaunches =
+        (getgenv().WinterLaunches or 0) + 1
+
+    local StatsParagraph =
+        StatsTab:CreateParagraph({
+            Title = "📊 " .. t.stats,
+
+            Content =
+                t.serverPlayers
+                .. ": "
+                .. #Players:GetPlayers()
+                .. "\n"
+                .. t.executor
+                .. ": "
+                .. tostring(executor)
+                .. "\n"
+                .. t.launches
+                .. ": "
+                .. tostring(getgenv().WinterLaunches)
+        })
+
+    Connect(
+        Players.PlayerAdded,
+        function()
+            pcall(function()
+
+                StatsParagraph:Set({
+                    Title = "📊 " .. t.stats,
+
+                    Content =
+                        t.serverPlayers
+                        .. ": "
+                        .. #Players:GetPlayers()
+                        .. "\n"
+                        .. t.executor
+                        .. ": "
+                        .. tostring(executor)
+                        .. "\n"
+                        .. t.launches
+                        .. ": "
+                        .. tostring(getgenv().WinterLaunches)
+                })
+
+            end)
+        end
+    )
+
+    Connect(
+        Players.PlayerRemoving,
+        function()
+            pcall(function()
+
+                StatsParagraph:Set({
+                    Title = "📊 " .. t.stats,
+
+                    Content =
+                        t.serverPlayers
+                        .. ": "
+                        .. #Players:GetPlayers()
+                        .. "\n"
+                        .. t.executor
+                        .. ": "
+                        .. tostring(executor)
+                        .. "\n"
+                        .. t.launches
+                        .. ": "
+                        .. tostring(getgenv().WinterLaunches)
+                })
+
+            end)
+        end
+    )
+end
+
+--// CONTINUE
+LanguageTab:CreateButton({
+    Name = "▶️ Continue",
+
+    Callback = function()
+        BuildMenu(SelectedLanguage)
     end
 })
+ 
